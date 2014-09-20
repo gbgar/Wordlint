@@ -1,0 +1,5 @@
+build/
+test/
+.*.sw[a-z]
+tags
+TAGS
