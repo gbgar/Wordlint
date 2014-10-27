@@ -1,4 +1,5 @@
 module WordcheckWordpairs where
+
 import WordcheckWords
 
 --
@@ -7,37 +8,38 @@ import WordcheckWords
 -- contains two Word elements and the difference between their Positions.
 --
 
-data Wordpair = Wordpair 
-                {wone  :: Word
-                ,wtwo  :: Word
-                ,pdiff :: Int 
-                } deriving (Show) 
+data Wordpair a = Wordpair 
+                {wone  :: Word a
+                ,wtwo  :: Word a
+                ,pdiff :: a 
+                } 
 
-type Wordpairs = [Wordpair]
+type Wordpairs a = [Wordpair a]
 
-makeWordpairs :: Word -> Word -> Wordpair
+makeWordpairs :: (Num a, NumOps a) => Word a -> Word a -> Wordpair a
 makeWordpairs wx@(Word _ x _ _) wy@(Word _ y _ _) = Wordpair wx wy (y-x)
 
 -- Convert a list of matching (but separately-located) Words into a list of
 -- Wordpair elements. This counts by two
 
-sortWordsByString :: Words -> Wordpairs
+sortWordsByString :: (Num a, NumOps a) =>  Words a -> Wordpairs a
 sortWordsByString [] = []
 sortWordsByString [_] = []
-sortWordsByString [x,xs] = if x `checkWordEquality` xs    
-                               then [makeWordpairs x xs]
-                               else []
+sortWordsByString [x,xs] =  [makeWordpairs x xs | x `checkWordEquality` xs] 
+  -- if x `checkWordEquality` xs    
+  --                              then [makeWordpairs x xs]
+  --                              else []
 sortWordsByString ( x:y:xs ) = if x `checkWordEquality` y
-                               then makeWordpairs x y : (sortWordsByString (y:xs))
-                               else sortWordsByString $ (y:xs)
+                               then makeWordpairs x y : sortWordsByString (y:xs)
+                               else sortWordsByString (y:xs)
 
 -- When run without the --all flag, filter by distance between matches
 
-filterWordpairsByDistance :: Wordpairs -> Int -> Wordpairs
+filterWordpairsByDistance :: (Num a, Eq a, Ord a, NumOps a) => Wordpairs a -> a -> Wordpairs a
 filterWordpairsByDistance [] _ = []
-filterWordpairsByDistance (x:xs) 0 = if pdiff x <= 50
-                               then x : filterWordpairsByDistance xs 0
-                               else filterWordpairsByDistance xs 0
+-- filterWordpairsByDistance (x:xs) _ = if pdiff x <= 50
+--                                then x : filterWordpairsByDistance xs 0
+--                                else filterWordpairsByDistance xs 0
 
 filterWordpairsByDistance (x:xs) i = if pdiff x <= i
                                then x : filterWordpairsByDistance xs i
@@ -45,24 +47,24 @@ filterWordpairsByDistance (x:xs) i = if pdiff x <= i
 
 -- Functions to extract data from wordpairs
 
-getWordPairString :: Wordpair -> String
+getWordPairString :: Wordpair a -> String
 getWordPairString wp = if wordone == wordtwo
-                        then show wordone
+                        then wordone
                         else
-                        "Error with" ++ (show wp)
+                        "Error with word pair"
   where 
     wordone = lemma $ wone wp
     wordtwo = lemma $ wtwo wp
 
-getWordpairPositions :: Wordpair -> (Int,Int)
-getWordpairPositions wp = ((position $ wone wp),(position $ wtwo wp))
+getWordpairPositions :: (NumOps a) => Wordpair a -> (a,a)
+getWordpairPositions wp = (position $ wone wp,position $ wtwo wp)
 
-getWordpairLines :: Wordpair -> (Int,Int)
-getWordpairLines wp = ((line $ wone wp),(line $ wtwo wp))
+getWordpairLines :: (NumOps a) => Wordpair a -> (Int,Int)
+getWordpairLines wp = (line $ wone wp,line $ wtwo wp)
 
 -- return ((Line,Col)(Line,Col))
-getWordpairCoords :: Wordpair -> ((Int,Int),(Int,Int))
-getWordpairCoords wp = (((line firstword),(column firstword)),((line secondword),(column secondword)))
+getWordpairCoords :: (NumOps a) => Wordpair a -> ((Int,Int),(Int,Int))
+getWordpairCoords wp = ((line firstword,column firstword),(line secondword,column secondword))
     where
       firstword = wone wp
       secondword = wtwo wp
