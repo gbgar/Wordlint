@@ -1,5 +1,5 @@
 module WordcheckWordpairs where
-
+import  Data.List 
 import WordcheckWords
 
 --
@@ -26,26 +26,40 @@ sortWordsByString :: (Num a, NumOps a) =>  Words a -> Wordpairs a
 sortWordsByString [] = []
 sortWordsByString [_] = []
 sortWordsByString [x,xs] =  [makeWordpairs x xs | x `checkWordEquality` xs] 
-  -- if x `checkWordEquality` xs    
-  --                              then [makeWordpairs x xs]
-  --                              else []
 sortWordsByString ( x:y:xs ) = if x `checkWordEquality` y
                                then makeWordpairs x y : sortWordsByString (y:xs)
                                else sortWordsByString (y:xs)
 
--- When run without the --all flag, filter by distance between matches
-
 filterWordpairsByDistance :: (Num a, Eq a, Ord a, NumOps a) => Wordpairs a -> a -> Wordpairs a
 filterWordpairsByDistance [] _ = []
--- filterWordpairsByDistance (x:xs) _ = if pdiff x <= 50
---                                then x : filterWordpairsByDistance xs 0
---                                else filterWordpairsByDistance xs 0
 
 filterWordpairsByDistance (x:xs) i = if pdiff x <= i
                                then x : filterWordpairsByDistance xs i
                                else filterWordpairsByDistance xs i
 
+sortWordPairsByPosition :: (Num a, Ord a, NumOps a) => Wordpairs a -> Wordpairs a
+sortWordPairsByPosition [] = []
+sortWordPairsByPosition [_] = []
+sortWordPairsByPosition xs = sortBy positionsort xs
+  where positionsort (Wordpair (Word _ x _ _) _ _ ) (Wordpair (Word _ y _ _) _ _) 
+                | x < y = LT
+                | x > y = GT
+                | x == y = EQ
+        positionsort Wordpair{} Wordpair{} = EQ
+
+sortWordPairsByDistance :: (Num a, Ord a, NumOps a) => Wordpairs a -> Wordpairs a
+sortWordPairsByDistance [] = []
+sortWordPairsByDistance [_] = []
+sortWordPairsByDistance xs = sortBy positionsort xs
+  where positionsort (Wordpair _ _ x ) (Wordpair _ _ y ) 
+                | x < y = LT
+                | x > y = GT
+                | x == y = EQ
+        positionsort Wordpair{} Wordpair{} = EQ
+
+--
 -- Functions to extract data from wordpairs
+--
 
 getWordPairString :: Wordpair a -> String
 getWordPairString wp = if wordone == wordtwo
@@ -62,9 +76,22 @@ getWordpairPositions wp = (position $ wone wp,position $ wtwo wp)
 getWordpairLines :: (NumOps a) => Wordpair a -> (Int,Int)
 getWordpairLines wp = (line $ wone wp,line $ wtwo wp)
 
+
 -- return ((Line,Col)(Line,Col))
 getWordpairCoords :: (NumOps a) => Wordpair a -> ((Int,Int),(Int,Int))
 getWordpairCoords wp = ((line firstword,column firstword),(line secondword,column secondword))
     where
       firstword = wone wp
       secondword = wtwo wp
+
+showFirstWordpairCoords :: (Show a) => Wordpair a -> String
+showFirstWordpairCoords x = lin ++ "," ++ col
+  where lin = show $ line wor
+        col = show $ column wor
+        wor = wone x
+
+showSecondWordpairCoords :: (Show a) => Wordpair a -> String
+showSecondWordpairCoords x = lin ++ "," ++ col
+  where lin = show $ line wor
+        col = show $ column wor
+        wor = wtwo x

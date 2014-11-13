@@ -1,5 +1,4 @@
 module WordcheckWords where
-import Data.List
 --
 -- This module contains types and functions for working with words and their
 -- positions used in processing of file. A "Word" is a data structure
@@ -8,14 +7,17 @@ import Data.List
 -- positions used when returning data.
 --
 -- To create each word, four sets of functions each provide one element and
--- these are zipped together for each word in the file. Currently, "word" is
--- simply the basic prelude definition and therefore includes punctuation
+-- these are zipped together for each word in the file. Currently, a "word"
+-- follows the basic prelude definition and therefore includes punctuation
 -- marks. In a way, this is helpful to catch, for example, the repetition of
 -- transition words such as "Furthermore,". Additionally, words are strictly
 -- matched by their case and no "ignore-case" or similar option is yet
--- available. Future improvements will therefore include providing options to
--- handle punctuation and case.
+-- available. Future improvements will include providing options to handle
+-- punctuation and case as well as providing a word blacklist.
 --
+
+import Data.List 
+
 type Line = Int
 
 type Column = Int
@@ -38,7 +40,13 @@ instance Ord (Word a) where
 --
 -- Position
 -- Create list of tuples containing lemma and word position
--- "Position" depends on type-of-check, to re-use in "word pairs"
+-- "Position" depends on type-of-check
+-- For word and line checks, Position is an Int representing
+-- the word count and line positions, respectively.
+-- A percentage check returns a Position of type Double,
+-- representing the Word's position as a percentage of
+-- total words in the file.
+-- 
 
 class NumOps a where
     createPos :: String -> String -> [(String, a)]
@@ -128,7 +136,7 @@ filtWordCols w@(x:xs) c@(y:ys) = if (fst y == ' ') || (fst y /= head x)
 -- Master functoion to create a list of words from a file.    
 --
 zipWords :: (NumOps a) => String -> String -> Words a
-zipWords s t = zipWith4 (\w x y z -> Word w x y z) (words s) (wordpos s t) (linepos) (colpos)
+zipWords s t = zipWith4 Word (words s) (wordpos s t) linepos colpos
   where 
     linepos = snd . unzip $ createWordLinePos s
     colpos = snd . unzip $ createWordColPos s
@@ -160,4 +168,4 @@ checkWordDistance (Word _ x _ _) (Word _ y _ _) = x - y
 -- Filter all but matching pairs of words
 filterMatchingWords :: (NumOps a) => Words a -> Words a
 filterMatchingWords [] = []
-filterMatchingWords xs = sortBy compare $ intersectBy checkWordEquality xs xs
+filterMatchingWords xs = sort $ intersectBy checkWordEquality xs xs
