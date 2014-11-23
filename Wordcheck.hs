@@ -117,8 +117,8 @@ processMachineWordData x = printBox $ hsep 2 left (map (vcat left . map text) (t
 
 processDataVim :: (NumOps a) => Wordpairs a -> String
 processDataVim [] = ""
-processDataVim (x:xs) = ("{\'lnum\' : " ++  "\'" ++ linum1 ++ "\'," ++ " \'col\' : " ++ "\'" ++ colnum1 ++ "\'," ++ " \'text\' : " ++ "\'" ++ word ++ " at coordinates " ++ coordinatestext ++ "\'}\n") ++
-                        ("{\'lnum\' : " ++  "\'" ++ linum2 ++ "\'," ++ " \'col\' : " ++ "\'" ++ colnum2 ++ "\'," ++ " \'text\' : " ++ "\'" ++ word ++ " at coordinates " ++ coordinatestext ++ "\'}\n") ++
+processDataVim (x:xs) = ("lnum=" ++ "\'" ++ linum1 ++ "\', "  ++ "col=" ++ "\'" ++ colnum1 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
+                        ("lnum=" ++ "\'" ++ linum2 ++ "\', "  ++ "col=" ++ "\'" ++ colnum2 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
                         processDataVim xs
                          where word = getWordPairString x
                                coordinates' = getWordpairCoords x
@@ -128,7 +128,7 @@ processDataVim (x:xs) = ("{\'lnum\' : " ++  "\'" ++ linum1 ++ "\'," ++ " \'col\'
                                linum2 = coordinates1' coordinates'
                                coordinates2 ((_,s1),(_,_)) = show s1 
                                coordinates2' ((_,_),(_,s1)) = show s1 
-                               coordinatestext = coordinates1 coordinates' ++ "," ++ coordinates2 coordinates' ++ " " ++ coordinates1' coordinates' ++ "," ++ coordinates2' coordinates'
+                               coordinatestext = coordinates1 coordinates' ++ " and  " ++ coordinates1' coordinates' 
                                colnum1 = coordinates2 coordinates'
                                colnum2 = coordinates2' coordinates'
                                
