@@ -1,0 +1,119 @@
+.TH "WORDLINT" "1" "2014\-11\-22" "0.1.0.0
+.SH Name
+.PP
+wordlint \- plaintext redundancy linter
+.SH Synopsis
+.PP
+wordcheck [OPTIONS] [\-f input\-file]
+.SH Description
+.PP
+Wordlint locates matching pairs of words repeated within a user\-defined
+distance.
+Text may be linted by distance between words (that is, by word count),
+by line count, or by percentage of the total words in the file.
+The user may also choose a minimum word length for matches.
+.PP
+Options exist for data output, which is machine\-readable by default.
+Results may be sorted by alphabetically by word, by position (line
+number), or by intervening distance between matches; and may be used
+with a human\-readable mode.
+Additionally, a Vim mode provides output for a plugin.
+.SH Options
+.TP
+.B \-f \f[I]FILE\f[]
+Specify an input file.
+If none is given, wordlint reads from stdin.
+.RS
+.RE
+.SS Linting Options
+.TP
+.B \-d \f[I]INT | FLOAT\f[]
+Specify maximum intervening distance between returned word\-pairs.
+\f[B]If the type of lint is either "word" or "line", an integer must be
+used\f[], while a "percentage" check will accept a float value.
+Ignored if \-a is used.
+Default is 250.
+.RS
+.RE
+.TP
+.B \-t \f[I]word|line|percentage\f[]
+Specify type of lint to perform, which affects which the calculation of
+intervening distance between word pairs.
+Options are:
+.RS
+.IP
+.nf
+\f[C]
+\-\ word\ (default)
+\-\ line
+\-\ percentage
+\f[]
+.fi
+.PP
+A word\-type check will define a word\[aq]s "position" as it\[aq]s word
+count, while a line check uses the line number on which a word is found.
+A percentage check sets this value according to a word\[aq]s count
+divided by the total count of words in the input.
+.RE
+.TP
+.B \-w \f[I]NUMBER\f[]
+Specify minimum length of words to be matched, i.e.
+to reduce hits for "there".
+Default is 5.
+.RS
+.RE
+.SS Output Options
+.TP
+.B \-a
+Return all matched pairs of words regardless of intervening distance.
+Deactivates \-d parameter.
+.RS
+.RE
+.TP
+.B \-h
+Return human\-readable output.
+Compatible with all sorting except for vim.
+.RS
+.RE
+.TP
+.B \-s \f[I]word|position|distance|vim\f[]
+Sort word pairs alphabetically, by line number, or by intervening
+distance; or provides Vim plugin output respective to the following
+options:
+.RS
+.IP
+.nf
+\f[C]
+\-\ word
+\-\ position\ (default)
+\-\ distance
+\-\ vim
+\f[]
+.fi
+.RE
+.SH Examples
+.IP
+.nf
+\f[C]
+wordlint\ \-t\ line\ \-d\ 20\ \-w\ 7\ \-f\ file.txt
+\f[]
+.fi
+.PP
+Finds matching strings consisting of seven characters or more and which
+have an intervening distance of twenty or less.
+.IP
+.nf
+\f[C]
+cat\ file.txt\ |\ wordlint\ \-t\ percentage\ \-d\ 2.5\ \-a\ \-h\ \-s\ word
+\f[]
+.fi
+.PP
+Finds all matching, five\-character\-or\-more strings found within a
+2.5% distance of one\-another, and returns the output in human\-readable
+form, sorted alphabetically.
+.SH See Also
+.PP
+A Vim front\-end to Wordlint, creatively named Wordlint.vim, is
+available at https://github.com/gbgar/Wordlint.vim
+.SH AUTHOR
+GB Gardner.
