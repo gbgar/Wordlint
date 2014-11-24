@@ -175,7 +175,8 @@ processMachineLineData' (x:xs) = words (coordinates1 coordinates'
                                  ++ " "
                                  ++ coordinates2 coordinates'
                                  ++ " "
-                                 ++ word ++ " "
+                                 ++ word 
+                                 ++ " "
                                  ++ distance')
                                  : processMachineLineData' xs
                          where word = getWordPairString x
@@ -210,6 +211,7 @@ processMachinePercentageData' [] = []
 processMachinePercentageData' (x:xs) = words (coordinates1 coordinates'
                                     ++ " "
                                     ++ coordinates2 coordinates'
+                                    ++ " "
                                     ++ word
                                     ++ " "
                                     ++ distance') : processMachinePercentageData' xs
