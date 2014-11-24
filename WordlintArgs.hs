@@ -1,10 +1,10 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module WordcheckArgs where
+module WordlintArgs where
 import System.Console.CmdArgs 
 import Control.Monad
-import WordcheckWords
-import WordcheckWordpairs
+import WordlintWords
+import WordlintWordpairs
 
 
 -- CLI Arguments
@@ -25,7 +25,7 @@ cliargs = Arguments
         {wordlength = 5 &= help "Minimum length of matched words" &= typ "Int"
         ,type_ = "word" &= help "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
                         &= typ "word|line|percentage"
-        ,distance = "20" &= help "Maximum distance between matches (accepts Int for word and line; Float for percentage)"
+        ,distance = "250" &= help "Maximum distance between matches (accepts Int for word and line; Float for percentage)"
                         &= typ "Integer|Float"
         ,all_ = False &= help "Show all matched results regardless of intervening distance"
         ,human = False &= help "Print resutlts in human-readable form."
@@ -34,8 +34,8 @@ cliargs = Arguments
         ,file = "" &= help "If not present, read from stdin" &= typFile
         } 
         &= help "wordcheck [OPTION]...[-f FILE]..."
-        &= summary "Wordcheck v0.0.1 Gardner 2014 WTFPL"
-        &= details ["Wordcheck finds pairs of repeated words within a given"
+        &= summary "Wordlint v0.0.1 Gardner 2014 WTFPL"
+        &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
                    ,"This should be useful to curb redundancy in prose."]
 

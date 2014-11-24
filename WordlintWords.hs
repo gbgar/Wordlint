@@ -1,4 +1,4 @@
-module WordcheckWords where
+module WordlintWords where
 --
 -- This module contains types and functions for working with words and their
 -- positions used in processing of file. A "Word" is a data structure
@@ -145,7 +145,7 @@ zipWords s t = zipWith4 Word (words s) (wordpos s t) linepos colpos
 --
 -- Functions to operate on Words (lists of words).
 
--- Check a word against the minimum word length (wordlength Arguments in WordcheckArgs)
+-- Check a word against the minimum word length (wordlength Arguments in WordlintArgs)
 isCheckWordLong :: (NumOps a) => Word a -> Int -> Bool
 isCheckWordLong (Word w _ _ _) x = length w > x
 
