@@ -17,12 +17,18 @@ a plugin.
 #Installation
 
 
-Following haskell convention, run `cabal update && cabal install wordlint`
+Following haskell convention, run 
+
+`cabal update && cabal install wordlint`
+
 to install via Hackage.
 
-To build locally, clone this repository, `cd` to it, and execute the same command as above.
-Afterward, the binary `wordlint` must be copied to a directory in the
-user's `$PATH`.
+To build locally, clone this repository, `cd` to it, and execute the same
+command as above.  Afterward, the binary `wordlint` must be copied to a
+directory in the user's `$PATH`. A man page is also available and may be copied
+to the user's .cabal directory: 
+
+`cp man/man1/wordlint.1 ~/.cabal/share/man/man1/wordlint.1`
 
 #Options
 
