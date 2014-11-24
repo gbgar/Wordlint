@@ -36,6 +36,7 @@ category:            Text
 build-type:          Simple
 -- extra-source-files:  
 cabal-version:       >=1.10
+extra-doc-files:    doc/wordlint.haddock
 
 executable wordlint
   main-is:             Wordlint.hs
