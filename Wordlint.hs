@@ -1,10 +1,9 @@
 import Data.List
 import System.Console.CmdArgs
 import Text.PrettyPrint.Boxes 
-import WordlintArgs
-import WordlintWords
-
-import WordlintWordpairs
+import Wordlint.Args
+import Wordlint.Words
+import Wordlint.Wordpairs
 
 main :: IO ()
 main = do

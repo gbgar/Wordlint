@@ -1,10 +1,10 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module WordlintArgs where
+module Wordlint.Args where
 import System.Console.CmdArgs 
 import Control.Monad
-import WordlintWords
-import WordlintWordpairs
+import Wordlint.Words
+import Wordlint.Wordpairs
 
 
 -- CLI Arguments

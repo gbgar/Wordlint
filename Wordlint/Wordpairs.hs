@@ -1,6 +1,6 @@
-module WordlintWordpairs where
+module Wordlint.Wordpairs where
 import  Data.List 
-import WordlintWords
+import Wordlint.Words
 
 --
 -- This module contains types and functions for working with pairs of matching

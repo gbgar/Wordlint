@@ -1,4 +1,4 @@
-module WordlintWords where
+module Wordlint.Words where
 --
 -- This module contains types and functions for working with words and their
 -- positions used in processing of file. A "Word" is a data structure
