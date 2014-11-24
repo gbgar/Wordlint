@@ -27,6 +27,9 @@ Additionally, a Vim mode provides output for a plugin.
 
 #Options
 
+\-\-help
+:   Display condensed help and exit.
+
 \-f *FILE*
 :   Specify an input file. If none is given, wordlint reads from stdin.
 
@@ -60,7 +63,7 @@ Additionally, a Vim mode provides output for a plugin.
 :   Return all matched pairs of words regardless of intervening distance. Deactivates -d parameter.
 
 \-h
-:   Return human-readable output. Compatible with all sorting except for vim.
+:   Return human-readable output. Compatible with all sorting except for `-s vim`, which will supersede `-h`.
 
 \-s *word|position|distance|vim*
 :   Sort word pairs alphabetically, by line number, or by intervening distance;
@@ -78,16 +81,18 @@ wordlint -t line -d 20 -w 7 -f file.txt
 ~~~~~
 
 Finds matching strings consisting of seven characters or more and which have an
-intervening distance of twenty or less.
+intervening distance of twenty lines or less.
 
 ~~~~~
-cat file.txt | wordlint -t percentage -d 2.5 -a -h -s word
+cat file.txt | wordlint -t percentage -d 2.5 -a -s word -h 
 ~~~~~
 
-Finds all matching, five-character-or-more strings found within a 2.5% distance
-of one-another, and returns the output in human-readable form, sorted alphabetically.
+Finds all matching, five-characters-or-longer strings within a 2.5% distance of
+one-another within the file, and returns the output sorted alphabetically and
+in human-readable form.
 
 #See Also
 
 A Vim front-end to Wordlint, creatively named Wordlint.vim,  is available
 at https://github.com/gbgar/Wordlint.vim
+

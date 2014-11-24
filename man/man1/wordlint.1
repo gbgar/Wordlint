@@ -20,6 +20,11 @@ with a human\-readable mode.
 Additionally, a Vim mode provides output for a plugin.
 .SH Options
 .TP
+.B \-\-help
+Display condensed help and exit.
+.RS
+.RE
+.TP
 .B \-f \f[I]FILE\f[]
 Specify an input file.
 If none is given, wordlint reads from stdin.
@@ -72,7 +77,8 @@ Deactivates \-d parameter.
 .TP
 .B \-h
 Return human\-readable output.
-Compatible with all sorting except for vim.
+Compatible with all sorting except for \f[C]\-s\ vim\f[], which will
+supersede \f[C]\-h\f[].
 .RS
 .RE
 .TP
@@ -100,17 +106,17 @@ wordlint\ \-t\ line\ \-d\ 20\ \-w\ 7\ \-f\ file.txt
 .fi
 .PP
 Finds matching strings consisting of seven characters or more and which
-have an intervening distance of twenty or less.
+have an intervening distance of twenty lines or less.
 .IP
 .nf
 \f[C]
-cat\ file.txt\ |\ wordlint\ \-t\ percentage\ \-d\ 2.5\ \-a\ \-h\ \-s\ word
+cat\ file.txt\ |\ wordlint\ \-t\ percentage\ \-d\ 2.5\ \-a\ \-s\ word\ \-h\ 
 \f[]
 .fi
 .PP
-Finds all matching, five\-character\-or\-more strings found within a
-2.5% distance of one\-another, and returns the output in human\-readable
-form, sorted alphabetically.
+Finds all matching, five\-characters\-or\-longer strings within a 2.5%
+distance of one\-another within the file, and returns the output sorted
+alphabetically and in human\-readable form.
 .SH See Also
 .PP
 A Vim front\-end to Wordlint, creatively named Wordlint.vim, is

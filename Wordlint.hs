@@ -127,7 +127,6 @@ processDataVim (x:xs) = ("lnum=" ++ "\'" ++ linum1 ++ "\', "  ++ "col=" ++ "\'" 
                                linum2 = coordinates1' coordinates'
                                coordinates2 ((_,s1),(_,_)) = show s1 
                                coordinates2' ((_,_),(_,s1)) = show s1 
-                               coordinatestext = coordinates1 coordinates' ++ " and  " ++ coordinates1' coordinates' 
                                colnum1 = coordinates2 coordinates'
                                colnum2 = coordinates2' coordinates'
                                
@@ -200,7 +199,7 @@ processHumanPercentageData (x:xs) = ("\'" ++ word ++ "\'"
                          ++ distance') : processHumanPercentageData xs
                          where word = getWordPairString x
                                coordinates = show (getWordpairCoords x)
-                               distance' = take 5 (show (pdiff x))
+                               distance' = take 7 (show (pdiff x))
 
 processMachinePercentageData :: Wordpairs Double -> IO ()
 processMachinePercentageData x = printBox $ hsep 2 left (map (vcat left . map text) 
@@ -219,7 +218,7 @@ processMachinePercentageData' (x:xs) = words (coordinates1 coordinates'
                                             coordinates' = getWordpairCoords x
                                             coordinates1 ((r1,s1),(_,_)) = show r1 ++ "," ++ show s1
                                             coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
-                                            distance' = show (pdiff x)
+                                            distance' = take 7 $ show (pdiff x)
 
 -- Function that provides summary totals when -h flag is passed
 summaryData :: Int -> Int -> Int -> IO()

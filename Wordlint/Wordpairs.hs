@@ -16,12 +16,16 @@ data Wordpair a = Wordpair
 
 type Wordpairs a = [Wordpair a]
 
+-----------------------------------------------------------------
+--
+-- Creating and filtering Wordpairs
+--
+-----------------------------------------------------------------
 makeWordpairs :: (Num a, NumOps a) => Word a -> Word a -> Wordpair a
 makeWordpairs wx@(Word _ x _ _) wy@(Word _ y _ _) = Wordpair wx wy (y-x)
 
 -- Convert a list of matching (but separately-located) Words into a list of
 -- Wordpair elements. This counts by two
-
 sortWordsByString :: (Num a, NumOps a) =>  Words a -> Wordpairs a
 sortWordsByString [] = []
 sortWordsByString [_] = []
@@ -36,6 +40,12 @@ filterWordpairsByDistance [] _ = []
 filterWordpairsByDistance (x:xs) i = if pdiff x <= i
                                then x : filterWordpairsByDistance xs i
                                else filterWordpairsByDistance xs i
+
+-----------------------------------------------------------------
+--
+-- Sorting wordpairs
+--
+-----------------------------------------------------------------
 
 sortWordPairsByPosition :: (Num a, Ord a, NumOps a) => Wordpairs a -> Wordpairs a
 sortWordPairsByPosition [] = []
@@ -57,9 +67,11 @@ sortWordPairsByDistance xs = sortBy positionsort xs
                 | x == y = EQ
         positionsort Wordpair{} Wordpair{} = EQ
 
+-----------------------------------------------------------------
 --
--- Functions to extract data from wordpairs
+-- Functions to extract data from Wordpairs for easier printing
 --
+-----------------------------------------------------------------
 
 getWordPairString :: Wordpair a -> String
 getWordPairString wp = if wordone == wordtwo

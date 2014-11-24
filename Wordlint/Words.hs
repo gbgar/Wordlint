@@ -37,6 +37,12 @@ instance Eq (Word a)  where
 instance Ord (Word a) where
     compare x y = compare (lemma x) (lemma y)
 
+-----------------------------------------------------------------
+--
+--Word creation
+--
+-----------------------------------------------------------------
+
 --
 -- Position
 -- Create list of tuples containing lemma and word position
@@ -103,10 +109,10 @@ setWordLines :: [([String], Int)] -> [(String, Int)]
 setWordLines [] = []
 setWordLines (x:xs) = setWordLine x ++ setWordLines xs
 
---Column coordinate
---1) lines on file and zip infinite lists for each char. [[(Char,Int)]]
---2) compare first char of words from each inner [[String]] 
---   and add Int from [[(Char,Int)]] when Char == first Char of string
+-- Column coordinate
+-- 1) lines on file and zip infinite lists for each char. [[(Char,Int)]]
+-- 2) compare first char of words from each inner [[String]] 
+--    and add Int from [[(Char,Int)]] when Char == first Char of string
 
 createWordColPos :: String -> [(String, Int)]
 createWordColPos xs = setWordCols lin $ numWordCols lin
@@ -134,7 +140,6 @@ filtWordCols w@(x:xs) c@(y:ys) = if (fst y == ' ') || (fst y /= head x)
 
 --
 -- Master functoion to create a list of words from a file.    
---
 zipWords :: (NumOps a) => String -> String -> Words a
 zipWords s t = zipWith4 Word (words s) (wordpos s t) linepos colpos
   where 
@@ -142,8 +147,11 @@ zipWords s t = zipWith4 Word (words s) (wordpos s t) linepos colpos
     colpos = snd . unzip $ createWordColPos s
     wordpos u v = snd . unzip $ createPos u v
 
+-----------------------------------------------------------------
 --
--- Functions to operate on Words (lists of words).
+-- Functions that operate on Word(s) type
+--
+-----------------------------------------------------------------
 
 -- Check a word against the minimum word length (wordlength Arguments in WordlintArgs)
 isCheckWordLong :: (NumOps a) => Word a -> Int -> Bool
