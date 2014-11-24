@@ -157,8 +157,11 @@ checkWordList (x:xs) i = if isCheckWordLong x i
                      else checkWordList xs i
 
 -- Equality function checking for string match in different coordinate positions
+-- Converts coordinates to tuples to ensure proper equality checking
 checkWordEquality :: (NumOps a) => Word a -> Word a -> Bool
-checkWordEquality (Word a _ b c) (Word x _ y z) = (b /= y && c /= z) && a==x
+checkWordEquality (Word a _ b c) (Word x _ y z) = coord1 /= coord2 && a==x
+  where coord1 = (b,c) 
+        coord2 = (y,z)
 
 -- Function to determine distance between two words
 -- Uses Position of Word so it is type-of-search independent
