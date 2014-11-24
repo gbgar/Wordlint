@@ -33,7 +33,7 @@ cliargs = Arguments
                         &= typ "word|position|distance"
         ,file = "" &= help "If not present, read from stdin" &= typFile
         } 
-        &= help "wordcheck [OPTION]...[-f FILE]..."
+        &= help "wordlint [OPTION]...[-f FILE]..."
         &= summary "Wordlint v0.0.1 Gardner 2014 WTFPL"
         &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
