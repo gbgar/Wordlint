@@ -14,13 +14,16 @@ main = do
     -- If human-readable flag is present, print header
     checkIfHumanHeader cargs
     -- Acquire String data from file or stdin
-    dat <- accessData . checkFileStdin $ file cargs
+    dat <- accessInputFileData . checkFileStdin $ file cargs
+    -- blacklist data for running filter function
+    blist' <- accessBlacklistFileData . checkFileStdin $ blacklist cargs
+    let blist = setBlacklistData blist'
     -- 
     -- Choose checker and printer according to -t, -h flags
     -- 
     case type_ cargs  of
         [] -> do 
-            let checkedwords' = runWordCheck dat wordlen dist
+            let checkedwords' = runWordCheck dat wordlen dist blist cargs
             let checkedwords =  checkSortFlag sortflag checkedwords'
             if human cargs 
             then do putStrLn "No type chosen; running word-based check"
@@ -33,7 +36,7 @@ main = do
                 else processMachineWordData checkedwords
                              where dist = checkDistanceOrAll cargs
         "word" -> do
-            let checkedwords' = runWordCheck dat wordlen dist
+            let checkedwords' = runWordCheck dat wordlen dist blist cargs
             let checkedwords =  checkSortFlag sortflag checkedwords'
 
             if human cargs
@@ -46,7 +49,7 @@ main = do
                 else processMachineWordData checkedwords
                             where dist = checkDistanceOrAll cargs 
         "line" -> do
-            let checkedwords' = runLineCheck dat wordlen dist
+            let checkedwords' = runLineCheck dat wordlen dist blist cargs
             let checkedwords =  checkSortFlag sortflag checkedwords'
             if human cargs
             then do mapM_ putStrLn (processHumanLineData checkedwords)
@@ -58,7 +61,7 @@ main = do
                 else processMachineLineData checkedwords
                             where dist = checkDistanceOrAll cargs
         "percentage" -> do 
-            let checkedwords' = runPercentageCheck dat wordlen dist
+            let checkedwords' = runPercentageCheck dat wordlen dist blist cargs
             let checkedwords =  checkSortFlag sortflag checkedwords'
             if human cargs
             then do mapM_ putStrLn (processHumanPercentageData checkedwords)
@@ -71,7 +74,7 @@ main = do
                             where dist = checkDistanceOrAll cargs
 
         _ -> do 
-            let checkedwords' = runWordCheck dat wordlen dist
+            let checkedwords' = runWordCheck dat wordlen dist blist cargs
             let checkedwords =  checkSortFlag sortflag checkedwords'
             if human cargs 
             then do putStrLn "No type chosen; running word-based check"
@@ -88,11 +91,13 @@ main = do
 -- In the future, a "machine-readable" flag will be added to the latter
 -- in order to output for use in text editor plugins.
 
-runWordCheck :: String -> Int -> Maybe Int -> Wordpairs Int 
-runWordCheck xs y b = case b of
-    Nothing -> instring y 
-    Just i -> filterWordpairsByDistance (instring y) i
-    where instring = sortWordsByString . filterMatchingWords . checkWordList (zipWords xs "word") 
+runWordCheck :: String -> Int -> Maybe Int -> Maybe [String] -> Arguments -> Wordpairs Int 
+runWordCheck inputdata wordlen distorall blist arg = case distorall of
+    Nothing -> instring
+    Just i -> filterWordpairsByDistance instring i
+  where instring = sortWordsByString . filterMatchingWords $ fwords
+        fwords = runFilterFlags cwords arg blist
+        cwords = checkWordList (zipWords inputdata "word") wordlen
 
 processHumanWordData :: Wordpairs Int -> [String]
 processHumanWordData [] = ["No (more) matches found"]
@@ -146,12 +151,13 @@ processMachineWordData' (x:xs) = words (coordinates1 coordinates'
                                coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
                                distance' = show (pdiff x)
 
-runLineCheck :: String -> Int -> Maybe Int -> Wordpairs Int
-runLineCheck xs y b = case b of
-    Nothing ->  instring y 
-    Just i -> filterWordpairsByDistance (instring y) i
-  where instring = sortWordPairsByPosition . sortWordsByString . filterMatchingWords . checkWordList (zipWords xs "line") 
-
+runLineCheck :: String -> Int -> Maybe Int -> Maybe [String] -> Arguments-> Wordpairs Int
+runLineCheck inputdata wordlen distorall blist arg = case distorall  of
+    Nothing ->  instring 
+    Just i -> filterWordpairsByDistance instring  i
+  where instring = sortWordsByString . filterMatchingWords $ fwords
+        fwords = runFilterFlags cwords arg blist
+        cwords = checkWordList (zipWords inputdata "line") wordlen
 
 processHumanLineData :: Wordpairs Int -> [String]
 processHumanLineData [] = ["No (more) matches found"]
@@ -184,11 +190,19 @@ processMachineLineData' (x:xs) = words (coordinates1 coordinates'
                                coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
                                distance' = show (pdiff x)
 
-runPercentageCheck :: String -> Int -> Maybe Double -> Wordpairs Double
-runPercentageCheck xs y b = case b of
-    Nothing ->  instring y 
-    Just i -> filterWordpairsByDistance (instring y) i
-    where instring = sortWordsByString . filterMatchingWords . checkWordList (zipWords xs "percentage") 
+-- runPercentageCheck :: String -> Int -> Maybe Double -> Wordpairs Double
+-- runPercentageCheck xs y b = case b of
+--     Nothing ->  instring y 
+--     Just i -> filterWordpairsByDistance (instring y) i
+--     where instring = sortWordsByString . filterMatchingWords . checkWordList (zipWords xs "percentage") 
+
+runPercentageCheck :: String -> Int -> Maybe Double -> Maybe [String] -> Arguments -> Wordpairs Double 
+runPercentageCheck inputdata wordlen distorall blist arg = case distorall of
+    Nothing -> instring
+    Just i -> filterWordpairsByDistance instring i
+  where instring = sortWordsByString . filterMatchingWords $ fwords
+        fwords = runFilterFlags cwords arg blist
+        cwords = checkWordList (zipWords inputdata "percentage") wordlen
 
 processHumanPercentageData :: Wordpairs Double -> [String]
 processHumanPercentageData [] = ["No (more) matches found"]

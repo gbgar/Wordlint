@@ -1,4 +1,7 @@
 module Wordlint.Words where
+import Data.Char (isPunctuation, toLower)
+import Data.List 
+ 
 --
 -- This module contains types and functions for working with words and their
 -- positions used in processing of file. A "Word" is a data structure
@@ -16,17 +19,15 @@ module Wordlint.Words where
 -- punctuation and case as well as providing a word blacklist.
 --
 
-import Data.List 
+-- type Line = Int
 
-type Line = Int
-
-type Column = Int
+-- type Column = Int
 
 data Word a = Word 
     { lemma :: String
     ,position :: a
-    ,line :: Line
-    ,column :: Column } 
+    ,line :: Int
+    ,column :: Int } 
 
 type Words a = [Word a] 
 
@@ -89,7 +90,6 @@ divWordPercentPos (s,x) y = (s,p)
   where xi = fromIntegral x
         yi = fromIntegral y
         p = (xi/yi)*100
-
 --
 -- Line coordinate
 -- Create list of tuples containing lemma and line position
@@ -171,12 +171,33 @@ checkWordEquality (Word a _ b c) (Word x _ y z) = coord1 /= coord2 && a==x
   where coord1 = (b,c) 
         coord2 = (y,z)
 
--- Function to determine distance between two words
--- Uses Position of Word so it is type-of-search independent
+-- Function to determine distance between two words. Uses Position of Word
+-- rather than coordinates so that it is type-of-search independent
+--
 checkWordDistance :: (Num a, NumOps a) => Word a -> Word a -> a
 checkWordDistance (Word _ x _ _) (Word _ y _ _) = x - y
 
--- Filter all but matching pairs of words
+-- Filter all but matching pairs of words 
 filterMatchingWords :: (NumOps a) => Words a -> Words a
 filterMatchingWords [] = []
 filterMatchingWords xs = sort $ intersectBy checkWordEquality xs xs
+
+-- The following filter functions are denoted by the --nopunct, --nocaps and
+-- --blacklist flags. These functions are used prior to creating Wordpair
+-- types from Words and should not affect the above checkWordEquality function
+-- used in building the former.
+
+-- Filter punctuation with --nopunct flag
+filterWordPunctuation :: (NumOps a) => Words a -> Words a
+filterWordPunctuation xs = [Word [a | a <- lemma x, not $ isPunctuation a]
+                           (position x) (line x) (column x) | x <- xs]
+
+-- Filter capitals with --nocaps flag
+filterWordCapitalization :: (NumOps a) => Words a -> Words a
+filterWordCapitalization xs = [Word [toLower a | a <- lemma x]
+                           (position x) (line x) (column x) | x <- xs]
+
+
+--Filter blacklist given in file denoted by -b flag
+filterWordBlacklist :: (NumOps a) => Words a -> [String] -> Words a
+filterWordBlacklist xs blacklist = [x | x <- xs, let w = lemma x, w `notElem` blacklist] 
