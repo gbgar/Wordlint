@@ -10,18 +10,15 @@ import Data.List
 -- positions used when returning data.
 --
 -- To create each word, four sets of functions each provide one element and
--- these are zipped together for each word in the file. Currently, a "word"
--- follows the basic prelude definition and therefore includes punctuation
--- marks. In a way, this is helpful to catch, for example, the repetition of
--- transition words such as "Furthermore,". Additionally, words are strictly
--- matched by their case and no "ignore-case" or similar option is yet
--- available. Future improvements will include providing options to handle
--- punctuation and case as well as providing a word blacklist.
+-- these are zipped together for each word in the file. A Word's "lemma" is
+-- first returned by the basic prelude function `words` and therefore includes
+-- punctuation marks. While this is required in order to identify the correct
+-- coordinates for each Word, this default is also helpful to catch, for
+-- example, the repetition of transition words such as "Furthermore,".
 --
-
--- type Line = Int
-
--- type Column = Int
+-- Punctuation and capitalization filters, as well as a user-defined word
+-- blacklist, are available to filter the list of Words prior to matching
+-- duplicates. 
 
 data Word a = Word 
     { lemma :: String

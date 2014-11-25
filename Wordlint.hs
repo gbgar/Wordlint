@@ -95,9 +95,10 @@ runWordCheck :: String -> Int -> Maybe Int -> Maybe [String] -> Arguments -> Wor
 runWordCheck inputdata wordlen distorall blist arg = case distorall of
     Nothing -> instring
     Just i -> filterWordpairsByDistance instring i
-  where instring = sortWordsByString . filterMatchingWords $ fwords
+  where instring = sortWordsByString . filterMatchingWords $ dwords
+        dwords = checkWordList fwords wordlen
         fwords = runFilterFlags cwords arg blist
-        cwords = checkWordList (zipWords inputdata "word") wordlen
+        cwords = zipWords inputdata "word" 
 
 processHumanWordData :: Wordpairs Int -> [String]
 processHumanWordData [] = ["No (more) matches found"]
@@ -155,9 +156,10 @@ runLineCheck :: String -> Int -> Maybe Int -> Maybe [String] -> Arguments-> Word
 runLineCheck inputdata wordlen distorall blist arg = case distorall  of
     Nothing ->  instring 
     Just i -> filterWordpairsByDistance instring  i
-  where instring = sortWordsByString . filterMatchingWords $ fwords
+  where instring = sortWordsByString . filterMatchingWords $ dwords
+        dwords = checkWordList fwords wordlen
         fwords = runFilterFlags cwords arg blist
-        cwords = checkWordList (zipWords inputdata "line") wordlen
+        cwords = zipWords inputdata "line" 
 
 processHumanLineData :: Wordpairs Int -> [String]
 processHumanLineData [] = ["No (more) matches found"]
@@ -190,19 +192,14 @@ processMachineLineData' (x:xs) = words (coordinates1 coordinates'
                                coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
                                distance' = show (pdiff x)
 
--- runPercentageCheck :: String -> Int -> Maybe Double -> Wordpairs Double
--- runPercentageCheck xs y b = case b of
---     Nothing ->  instring y 
---     Just i -> filterWordpairsByDistance (instring y) i
---     where instring = sortWordsByString . filterMatchingWords . checkWordList (zipWords xs "percentage") 
-
 runPercentageCheck :: String -> Int -> Maybe Double -> Maybe [String] -> Arguments -> Wordpairs Double 
 runPercentageCheck inputdata wordlen distorall blist arg = case distorall of
     Nothing -> instring
     Just i -> filterWordpairsByDistance instring i
-  where instring = sortWordsByString . filterMatchingWords $ fwords
+  where instring = sortWordsByString . filterMatchingWords $ dwords
+        dwords = checkWordList fwords wordlen
         fwords = runFilterFlags cwords arg blist
-        cwords = checkWordList (zipWords inputdata "percentage") wordlen
+        cwords = zipWords inputdata "percentage"
 
 processHumanPercentageData :: Wordpairs Double -> [String]
 processHumanPercentageData [] = ["No (more) matches found"]
