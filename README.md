@@ -36,20 +36,24 @@ to the user's .cabal directory:
 #Options
 
 \-\-help
+
     Display condensed help and exit.
 
 \-f, \-\-file *FILE*
+
     Specify an input file. If none is given, wordlint reads from stdin.
 
 ##Linting Options
 
 \-d, \-\-distance *INT | FLOAT*
+
     Specify maximum intervening distance between returned word-pairs. **If the
     type of lint is either "word" or "line", an integer must be used**, while a
     "percentage" check will accept a float value. Ignored if -a is used. Default is
     250.
 
 \-t, \-\-type *word|line|percentage*
+
     Specify type of lint to perform, which affects which the calculation of
     intervening distance between word pairs. Options are:
 
@@ -63,32 +67,40 @@ to the user's .cabal directory:
     in the input.
 
 \-w ,\-\-wordlength *NUMBER*
-    Specify minimum length of words to be matched, i.e. to reduce hits for "there". Default is 5.
+
+    Specify minimum length of words to be matched, i.e. to reduce hits for
+    "there". Default is 5.
 
 ##Filters
 
 \-b, \-\-blacklist
+
     Specify a file containing a newline-separated list of words (no spaces) to
     filter from matches. Pairs well with --nopunct, which is applied before, but 
     activated prior to application of --nocaps filter. Thus, --nocaps will not
     interfere, for example, with proper names given in the blacklist.
 
 \-\-nocaps
+
     Ignore capitalization when determining matches.
 
 \-\-nopunct
+
     Ignore punctuation when determining matches.
 
 ##Output Options
 
 \-a, \-\-all
+
     Return all matched pairs of words regardless of intervening distance. Deactivates -d parameter.
 
 \-h, \-\-human
+
     Return human-readable output. Compatible with all sorting except for 
     `--show vim`, which will supersede `--human`.
 
 \-s, \-\-sort *word|position|distance|vim*
+
    Sort word pairs alphabetically, by line number, or by intervening distance;
    or provides Vim plugin output respective to the following options:
 
