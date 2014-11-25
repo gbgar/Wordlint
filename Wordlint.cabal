@@ -27,7 +27,7 @@ description:         Wordlint locates matching pairs of words repeated within a 
                      (https://github.com/gbgar/wordcheck.vim).
 
 homepage:            https://github.com/gbgar/Wordlint
-license:             WTFPL
+license:             OtherLicense
 license-file:        LICENSE
 author:              GB Gardner
 maintainer:          gbgar@users.noreply.github.com
@@ -35,7 +35,8 @@ copyright:           2014
 category:            Text
 build-type:          Simple
 cabal-version:       >=1.10
-extra-doc-files:    doc/wordlint.haddock
+extra-doc-files:    doc/Wordlint.haddock
+                    man/man1/wordlint.1
 
 executable wordlint
   main-is:             Wordlint.hs
