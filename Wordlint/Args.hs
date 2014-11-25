@@ -6,7 +6,6 @@ import Control.Monad
 import Wordlint.Words
 import Wordlint.Wordpairs
 
-
 -- CLI Arguments
 -- Data structure and init function for CmdArgs
 data Arguments  = Arguments 
@@ -33,9 +32,7 @@ cliargs = Arguments
         ,wordlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
         ,type_      = "word" &= help   "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
                              &= typ    "word|line|percentage"
-        ,distance   = "250"  &= help   "Maximum distance between matches.\n"
-                                        ++ "Accepts integer for word and line;\n"
-                                        ++ "float (i.e. 0.75) for percentage)"
+        ,distance   = "250"  &= help   "Maximum distance between matches. Accepts integer for word and line; float (i.e. 0.75) for percentage)"
 
         -- filters
         ,nocaps    = False  &= help "Ignore capitalization when finding matches."
@@ -60,7 +57,9 @@ cliargs = Arguments
 --
 --------------------------------------------------------------------------------
 checkFileStdin :: String -> Maybe String
-checkFileStdin s = if null s then Nothing else Just s
+checkFileStdin s | null s = Nothing 
+                 | otherwise = Just s
+
 
 accessInputFileData :: Maybe String -> IO String
 accessInputFileData f =
@@ -75,7 +74,7 @@ accessBlacklistFileData f =
         Just fp -> readFile fp 
 
 setBlacklistData :: String -> Maybe [String]
-setBlacklistData a | a == ""  = Nothing
+setBlacklistData a | null a = Nothing
                    | otherwise = Just $ lines a
 
 
@@ -103,18 +102,16 @@ runBlacklistFilter blist wordlist = case blist of
                                         Nothing -> wordlist
                                         Just x -> filterWordBlacklist wordlist x
 
-
 --------------------------------------------------------------------------------
 --
 -- Output flag functions
 --
 --------------------------------------------------------------------------------
 
--- Handle --all flag
-checkDistanceOrAll :: (Read a) => Arguments -> Maybe a
+-- Handle --all flag OR read --distance 
+checkDistanceOrAll :: (Read a, NumOps a) => Arguments -> Maybe a
 checkDistanceOrAll c | all_ c = Nothing
                      | otherwise = Just (read $ distance c) 
-
 
 -- Header to print if --human flag is present
 checkIfHumanHeader :: Arguments -> IO ()

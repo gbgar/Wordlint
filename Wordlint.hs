@@ -24,7 +24,7 @@ main = do
     case type_ cargs  of
         [] -> do 
             let checkedwords' = runWordCheck dat wordlen dist blist cargs
-            let checkedwords =  checkSortFlag sortflag checkedwords'
+            let checkedwords  = checkSortFlag sortflag checkedwords'
             if human cargs 
             then do putStrLn "No type chosen; running word-based check"
                     mapM_ putStrLn (processHumanWordData checkedwords)
