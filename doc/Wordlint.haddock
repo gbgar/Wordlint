@@ -94,6 +94,12 @@ output for a plugin.
 = Examples
 #examples#
 
+> wordlint --file file.txt
+
+Runs the default check: a word-based check on words of five or more
+characters. The distance between each match is to be no more than 250
+words. The results are in a machine-readable table format.
+
 > wordlint --type line --distance 20 --wordlength 7 --file file.txt
 
 Finds matching strings consisting of seven characters or more and which

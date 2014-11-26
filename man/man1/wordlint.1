@@ -126,6 +126,17 @@ options:
 .IP
 .nf
 \f[C]
+wordlint\ \-\-file\ file.txt
+\f[]
+.fi
+.PP
+Runs the default check: a word\-based check on words of five or more
+characters.
+The distance between each match is to be no more than 250 words.
+The results are in a machine\-readable table format.
+.IP
+.nf
+\f[C]
 wordlint\ \-\-type\ line\ \-\-distance\ 20\ \-\-wordlength\ 7\ \-\-file\ file.txt
 \f[]
 .fi

@@ -111,10 +111,16 @@ to the user's .cabal directory:
 
 #Examples
 
+  `wordlint --file file.txt`
+
+Runs the default check: a word-based check on words of five or more characters.
+The distance between each match is to be no more than 250 words. The results
+are in a machine-readable table format.
+
   `wordlint --type line --distance 20 --wordlength 7 --file file.txt`
 
 Finds matching strings consisting of seven characters or more and which have an
-intervening distance of twenty lines or less. Returns machine-readable format.
+intervening distance of twenty lines or less. 
 
   `cat file.txt | wordlint -t percentage -d 2.5 -a -s word -h`
 
@@ -126,7 +132,7 @@ in human-readable form.
 
 Finds matching strings consisting of 5 characters or more, and which have had
 punctuation, a list of words, and all capitalization stripped from the possible
-matches. Returns machine-readable table.
+matches.
 
 #See Also
 
