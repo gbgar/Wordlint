@@ -118,24 +118,10 @@ processHumanWordData (x:xs) = ("\'" ++ word ++ "\'"
 -- machine-based outputs drawn from
 -- http://www.tedreed.info/programming/2012/06/02/how-to-use-textprettyprintboxes/
 processMachineWordData :: Wordpairs Int -> IO ()
-processMachineWordData x = printBox $ hsep 2 left (map (vcat left . map text) (transpose $ processMachineWordData' x))
+processMachineWordData x = printBox $ hsep 2 left (map (vcat left . map text)
+                            (transpose $ ["Coord1", "Coord2", "Word", "Distance"]:processMachineWordData' x))
 
-processDataVim :: (NumOps a) => Wordpairs a -> String
-processDataVim [] = ""
-processDataVim (x:xs) = ("lnum=" ++ "\'" ++ linum1 ++ "\', "  ++ "col=" ++ "\'" ++ colnum1 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
-                        ("lnum=" ++ "\'" ++ linum2 ++ "\', "  ++ "col=" ++ "\'" ++ colnum2 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
-                        processDataVim xs
-                         where word = getWordPairString x
-                               coordinates' = getWordpairCoords x
-                               coordinates1 ((r1,_),(_,_)) = show r1
-                               coordinates1' ((_,_),(r1,_)) = show r1
-                               linum1 = coordinates1 coordinates'
-                               linum2 = coordinates1' coordinates'
-                               coordinates2 ((_,s1),(_,_)) = show s1 
-                               coordinates2' ((_,_),(_,s1)) = show s1 
-                               colnum1 = coordinates2 coordinates'
-                               colnum2 = coordinates2' coordinates'
-                               
+
 
 processMachineWordData' :: Wordpairs Int -> [[String]]
 processMachineWordData' [] = []
@@ -174,7 +160,8 @@ processHumanLineData (x:xs) = ("\'" ++ word ++ "\'"
                                distance' = show (pdiff x)
                                
 processMachineLineData :: Wordpairs Int -> IO ()
-processMachineLineData x = printBox $ hsep 2 left (map (vcat left . map text) (transpose $ processMachineLineData' x))
+processMachineLineData x = printBox $ hsep 2 left (map (vcat left . map text)
+                            (transpose $ ["Coord1", "Coord2", "Word", "Distance"]:processMachineLineData' x))
 
 processMachineLineData' :: Wordpairs Int -> [[String]]
 processMachineLineData' [] = []
@@ -214,7 +201,7 @@ processHumanPercentageData (x:xs) = ("\'" ++ word ++ "\'"
 
 processMachinePercentageData :: Wordpairs Double -> IO ()
 processMachinePercentageData x = printBox $ hsep 2 left (map (vcat left . map text) 
-                                    (transpose $ processMachinePercentageData' x))
+                                    (transpose $ ["Coord1", "Coord2", "Word", "Distance"]:processMachinePercentageData' x))
 
 processMachinePercentageData' :: Wordpairs Double -> [[String]]
 processMachinePercentageData' [] = []
@@ -231,6 +218,22 @@ processMachinePercentageData' (x:xs) = words (coordinates1 coordinates'
                                             coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
                                             distance' = take 7 $ show (pdiff x)
 
+processDataVim :: (NumOps a) => Wordpairs a -> String
+processDataVim [] = ""
+processDataVim (x:xs) = ("lnum=" ++ "\'" ++ linum1 ++ "\', "  ++ "col=" ++ "\'" ++ colnum1 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
+                        ("lnum=" ++ "\'" ++ linum2 ++ "\', "  ++ "col=" ++ "\'" ++ colnum2 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
+                        processDataVim xs
+                         where word = getWordPairString x
+                               coordinates' = getWordpairCoords x
+                               coordinates1 ((r1,_),(_,_)) = show r1
+                               coordinates1' ((_,_),(r1,_)) = show r1
+                               linum1 = coordinates1 coordinates'
+                               linum2 = coordinates1' coordinates'
+                               coordinates2 ((_,s1),(_,_)) = show s1 
+                               coordinates2' ((_,_),(_,s1)) = show s1 
+                               colnum1 = coordinates2 coordinates'
+                               colnum2 = coordinates2' coordinates'
+                               
 -- Function that provides summary totals when -h flag is passed
 summaryData :: Int -> Int -> Int -> IO()
 summaryData x y z = do
