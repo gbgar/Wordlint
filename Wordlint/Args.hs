@@ -85,7 +85,7 @@ setBlacklistData a | null a = Nothing
 --------------------------------------------------------------------------------
 
 runFilterFlags :: (NumOps a) => Words a -> Arguments -> Maybe [String] -> Words a
-runFilterFlags w arg blist = runCapsFilter arg $ runBlacklistFilter blist $ runPunctFilter arg w
+runFilterFlags w arg blist = runCapsFilter arg $ runBlacklistFilter blist $ runPunctFilter arg $ runBlacklistFilter blist w
 
 runPunctFilter :: (NumOps a) => Arguments -> Words a -> Words a
 runPunctFilter arg wordlist = if nopunct arg
