@@ -1,4 +1,4 @@
-.TH "WORDLINT" "1" "2014\-11\-22" "0.1.0.1
+.TH "WORDLINT" "1" "2014\-11\-22" "0.1.0.2
 .SH Name
 .PP
 wordlint \- plaintext redundancy linter
@@ -17,11 +17,12 @@ Filters are available to remove punctuation, capitalization, and/or a
 user\-defined list of words from the list of potential matches.
 .PP
 Various modes exist for data output, which is machine\-readable by
-default.
+default with column\-based formatting.
 Results may be sorted by alphabetically by word, by position (line
 number), or by intervening distance between matches; and may be used
 with a human\-readable mode.
-Additionally, a Vim mode provides output for a plugin.
+Additionally, an "error" mode may supersede these options to provide
+output designed for easy integration with text editors.
 .SH Options
 .TP
 .B \-\-help
@@ -102,15 +103,15 @@ Deactivates \-d parameter.
 .TP
 .B \-h, \-\-human
 Return human\-readable output.
-Compatible with all sorting except for \f[C]\-\-show\ vim\f[], which
+Compatible with all sorting except for \f[C]\-\-show\ error\f[], which
 will supersede \f[C]\-\-human\f[].
 .RS
 .RE
 .TP
-.B \-s, \-\-sort \f[I]word|position|distance|vim\f[]
+.B \-s, \-\-sort \f[I]word|position|distance|error\f[]
 Sort word pairs alphabetically, by line number, or by intervening
-distance; or provides Vim plugin output respective to the following
-options:
+distance; or provides output designed for error checking in text
+editors\-\-\-respective to the following options:
 .RS
 .IP
 .nf
@@ -118,7 +119,7 @@ options:
 \-\ word
 \-\ position\ (default)
 \-\ distance
-\-\ vim
+\-\ error
 \f[]
 .fi
 .RE
@@ -133,7 +134,8 @@ wordlint\ \-\-file\ file.txt
 Runs the default check: a word\-based check on words of five or more
 characters.
 The distance between each match is to be no more than 250 words.
-The results are in a machine\-readable table format.
+The results are in a machine\-readable table format (i.e.
+for easy use with \f[C]awk\f[], \f[C]sed\f[], and the like).
 .IP
 .nf
 \f[C]
@@ -153,18 +155,19 @@ cat\ file.txt\ |\ wordlint\ \-t\ percentage\ \-d\ 2.5\ \-a\ \-s\ word\ \-h\
 .PP
 Finds all matching, five\-characters\-or\-longer strings within a 2.5%
 distance of one\-another within the file, and returns the output sorted
-alphabetically and in human\-readable form.
+alphabetically and in "human\-readable form.
 .IP
 .nf
 \f[C]
-wordlint\ \-f\ file.txt\ \-b\ dir/blacklist.txt\ \-\-nopunct\ \-\-nocaps
+wordlint\ \-f\ file.txt\ \-b\ dir/blacklist.txt\ \-\-nopunct\ \-\-nocaps\ \-s\ error
 \f[]
 .fi
 .PP
 Finds matching strings consisting of 5 characters or more, and which
 have had punctuation, a list of words, and all capitalization stripped
 from the possible matches.
-Returns machine\-readable table.
+Returns output designed for use in text editors (i.e.
+Vim\[aq]s \[aq]erororformat\[aq] option).
 .SH See Also
 .PP
 A Vim front\-end to Wordlint, creatively named Wordlint.vim, is

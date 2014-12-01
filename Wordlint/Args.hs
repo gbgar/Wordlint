@@ -44,10 +44,10 @@ cliargs = Arguments
         ,all_   = False      &= help "Show all matched results regardless of intervening distance"
         ,human  = False      &= help "Print resutlts in human-readable form."
         ,sort_  = "position" &= help "Sort alphabetically, by position, or by intervening distance"
-                             &= typ "word|position|distance"
+                             &= typ "word|position|distance|error"
         } 
         &= help "wordlint [OPTION]...[-f FILE]..."
-        &= summary "Wordlint v0.0.1 Gardner 2014 WTFPL"
+        &= summary "Wordlint v0.1.0.2 Gardner 2014 WTFPL"
         &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
                    ,"This should be useful to curb redundancy in prose."]

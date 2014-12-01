@@ -1,3 +1,10 @@
+2014-12-01 - version 0.1.0.2
+============================
+
+Changed "-s vim" to "-s error".
+
+Changed output of "-s error" to produce better, text editor-agnostic output.
+
 2014-11-25 - version 0.1.0.1 
 =============================
 

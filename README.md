@@ -1,20 +1,22 @@
-wordlint 0.1.0.1: a plaintext redundancy linter written in Haskell
+wordlint 0.1.0.2: a plaintext redundancy linter written in Haskell
 
 #Description
 
 
 Wordlint locates matching pairs of words repeated within a user-defined
 distance. Text may be linted by distance between words (that is, by word
-count), by line count, or by percentage of the total words in the file. The
-user may also choose a minimum word length for matches.
+count), by line count, or by percentage of the total words in the file.
+The user may also choose a minimum word length for matches.
 
 Filters are available to remove punctuation, capitalization, and/or a
 user-defined list of words from the list of potential matches.
 
-Various modes exist for data output, which is machine-readable by default.
-Results may be sorted by alphabetically by word, by position (line number), or
-by intervening distance between matches; and may be used with a human-readable
-mode. Additionally, a Vim mode provides output for a plugin.
+Various modes exist for data output, which is machine-readable by default with
+column-based formatting. Results may be sorted by alphabetically by word, by
+position (line number), or by intervening distance between matches; and may be
+used with a human-readable mode.  Additionally, an "error" mode may supersede
+these options to provide output designed for easy integration with text
+editors.
 
 #Installation
 
@@ -25,10 +27,13 @@ Following haskell convention, run
 
 to install via Hackage.
 
-To build locally, clone this repository, `cd` to it, and execute the same
-command as above.  Afterward, the binary `wordlint` must be copied to a
-directory in the user's `$PATH`. A man page is also available and may be copied
-to the user's .cabal directory: 
+To build locally, clone this repository, `cd` to it, and execute:
+
+`cabal update && cabal install`
+
+Afterward, ensure the binary `wordlint` is available in your system's
+`$PATH`. A man page is also available and may be copied to the user's .cabal
+directory: 
 
 `cp man/man1/wordlint.1 ~/.cabal/share/man/man1/wordlint.1`
 
@@ -101,38 +106,42 @@ to the user's .cabal directory:
 
 \-s, \-\-sort *word|position|distance|vim*
 
-   Sort word pairs alphabetically, by line number, or by intervening distance;
-   or provides Vim plugin output respective to the following options:
+    Sort word pairs alphabetically, by line number, or by intervening
+    distance; or provides output designed for error checking in text
+    editors---respective to the following options:
 
         - word
         - position (default)
         - distance
-        - vim 
+        - error
 
 #Examples
 
   `wordlint --file file.txt`
 
 Runs the default check: a word-based check on words of five or more characters.
-The distance between each match is to be no more than 250 words. The results
-are in a machine-readable table format.
+characters. The distance between each match is to be no more than 250
+words. The results are in a machine-readable table format (i.e. for easy
+use with `awk`, `sed`, and the like).
 
   `wordlint --type line --distance 20 --wordlength 7 --file file.txt`
 
-Finds matching strings consisting of seven characters or more and which have an
-intervening distance of twenty lines or less. 
+Finds matching strings consisting of seven characters or more and which
+have an intervening distance of twenty lines or less. Returns
+machine-readable format.
 
   `cat file.txt | wordlint -t percentage -d 2.5 -a -s word -h`
 
-Finds all matching, five-characters-or-longer strings within a 2.5% distance of
-one-another within the file, and returns the output sorted alphabetically and
-in human-readable form.
+Finds all matching, five-characters-or-longer strings within a 2.5%
+distance of one-another within the file, and returns the output sorted
+alphabetically and in "human-readable form.
 
-  `wordlint -f file.txt -b dir/blacklist.txt --nopunct --nocaps`
+  `wordlint -f file.txt -b dir/blacklist.txt --nopunct --nocaps -s error`
 
-Finds matching strings consisting of 5 characters or more, and which have had
-punctuation, a list of words, and all capitalization stripped from the possible
-matches.
+Finds matching strings consisting of 5 characters or more, and which
+have had punctuation, a list of words, and all capitalization stripped
+from the possible matches. Returns output designed for use in text
+editors (i.e. Vim's 'erororformat' option).
 
 #See Also
 
