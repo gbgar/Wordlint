@@ -11,6 +11,7 @@ main = do
     cargs <- cmdArgs cliargs
     let sortflag = sort_ cargs
     let wordlen = wordlength cargs
+    let fname = file cargs
     -- If human-readable flag is present, print header
     checkIfHumanHeader cargs
     -- Acquire String data from file or stdin
@@ -31,8 +32,8 @@ main = do
                     putStrLn ""
                     summaryData (length checkedwords) (wordlength cargs) (length dat)
             else 
-                if sortflag == "vim" 
-                then putStrLn $ processDataVim checkedwords
+                if sortflag == "error" 
+                then putStrLn $ processDataError checkedwords fname
                 else processMachineWordData checkedwords
                              where dist = checkDistanceOrAll cargs
         "word" -> do
@@ -44,8 +45,8 @@ main = do
                     putStrLn ""
                     summaryData (length checkedwords) (wordlength cargs) (length dat) 
             else 
-                if sortflag == "vim"
-                then putStrLn $ processDataVim checkedwords
+                if sortflag == "error"
+                then putStrLn $ processDataError checkedwords fname
                 else processMachineWordData checkedwords
                             where dist = checkDistanceOrAll cargs 
         "line" -> do
@@ -56,8 +57,8 @@ main = do
                     putStrLn ""
                     summaryData (length checkedwords) (wordlength cargs) (length dat)
             else 
-                if sortflag == "vim"
-                then putStrLn $ processDataVim checkedwords
+                if sortflag == "error"
+                then putStrLn $ processDataError checkedwords fname
                 else processMachineLineData checkedwords
                             where dist = checkDistanceOrAll cargs
         "percentage" -> do 
@@ -68,8 +69,8 @@ main = do
                     putStrLn ""
                     summaryData (length checkedwords) (wordlength cargs) (length dat)
             else 
-                if sortflag == "vim"
-                then putStrLn $ processDataVim checkedwords
+                if sortflag == "error"
+                then putStrLn $ processDataError checkedwords fname
                 else processMachinePercentageData checkedwords
                             where dist = checkDistanceOrAll cargs
 
@@ -82,8 +83,8 @@ main = do
                     putStrLn ""
                     summaryData (length checkedwords) (wordlength cargs) (length dat)
             else 
-                if sortflag == "vim" 
-                then putStrLn $ processDataVim checkedwords
+                if sortflag == "error" 
+                then putStrLn $ processDataError checkedwords fname
                 else processMachineWordData checkedwords
                              where dist = checkDistanceOrAll cargs
 -- run*Check functions are run with a maybe to account for --all flag
@@ -218,11 +219,11 @@ processMachinePercentageData' (x:xs) = words (coordinates1 coordinates'
                                             coordinates2 ((_,_),(r2,s2)) = show r2 ++ "," ++ show s2
                                             distance' = take 7 $ show (pdiff x)
 
-processDataVim :: (NumOps a) => Wordpairs a -> String
-processDataVim [] = ""
-processDataVim (x:xs) = ("lnum=" ++ "\'" ++ linum1 ++ "\', "  ++ "col=" ++ "\'" ++ colnum1 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
-                        ("lnum=" ++ "\'" ++ linum2 ++ "\', "  ++ "col=" ++ "\'" ++ colnum2 ++ "\', " ++ "text=" ++ "\'" ++ word ++ "\'\n") ++
-                        processDataVim xs
+processDataError :: (NumOps a) => Wordpairs a -> String -> String
+processDataError [] _ = ""
+processDataError (x:xs) fname = (fname ++ ":" ++ linum1 ++ ":"  ++  colnum1 ++ ":" ++ word ++ "\n") ++
+                              (fname ++ ":" ++ linum2 ++ ":"  ++  colnum2 ++ ":" ++ word ++ "\n") ++
+                        processDataError xs fname
                          where word = getWordPairString x
                                coordinates' = getWordpairCoords x
                                coordinates1 ((r1,_),(_,_)) = show r1

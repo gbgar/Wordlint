@@ -130,6 +130,6 @@ checkSortFlag :: (Num a, Ord a, NumOps a)  => String -> Wordpairs a -> Wordpairs
 checkSortFlag  x y | x == "position" = sortWordPairsByPosition y 
                    | x == "distance" = sortWordPairsByDistance y
                    | x == "word" = y
-                   | x == "vim" = sortWordPairsByPosition y
+                   | x == "error" = sortWordPairsByPosition y
                    | otherwise = y
                   
