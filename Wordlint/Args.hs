@@ -11,9 +11,12 @@ import Wordlint.Wordpairs
 data Arguments  = Arguments 
         {file :: String
         -- linting options
-        ,wordlength :: Int
-        ,type_ :: String
-        ,distance :: String
+        ,matchlength :: Int
+        -- ,type_ :: String
+        -- ,distance :: String
+        ,words :: Int
+        ,lines :: Int
+        ,percent :: Float
         -- filters
         ,nocaps :: Bool
         ,nopunct :: Bool -- ,ignore-punctuation :: Bool goddammit
@@ -29,10 +32,13 @@ cliargs :: Arguments
 cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
-        ,wordlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
-        ,type_      = "word" &= help   "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
-                             &= typ    "word|line|percentage"
-        ,distance   = "250"  &= help   "Maximum distance between matches. Accepts integer for word and line; float (i.e. 0.75) for percentage)"
+        ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
+        -- ,type_      = "word" &= help   "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
+        --                      &= typ    "word|line|percentage"
+        -- ,distance   = "250"  &= help   "Maximum distance between matches. Accepts integer for word and line; float (i.e. 0.75) for percentage)"
+        ,words = 0      &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,lines = 0      &= help   "Maximum distance between matches - number of lines" &= typ "Int"
+        ,percent = 0.0  &= help   "Maximum distance between matches - percentage of words." &= typ "Float"
 
         -- filters
         ,nocaps    = False  &= help "Ignore capitalization when finding matches."
@@ -123,7 +129,7 @@ checkIfHumanHeader cargs = when (human cargs)
                                  ++ "\nWith a minimum distance of "
                                  ++ show (distance cargs)
                                  ++ " between words of length "
-                                 ++ show (wordlength cargs) ++ "\n")
+                                 ++ show (matchlength cargs) ++ "\n")
 
 -- Handle --sort flag
 checkSortFlag :: (Num a, Ord a, NumOps a)  => String -> Wordpairs a -> Wordpairs a

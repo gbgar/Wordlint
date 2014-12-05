@@ -10,7 +10,7 @@ main = do
     -- Execute command line arguments, retrieve flags
     cargs <- cmdArgs cliargs
     let sortflag = sort_ cargs
-    let wordlen = wordlength cargs
+    let wordlen = matchlength cargs
     let fname = file cargs
     -- If human-readable flag is present, print header
     checkIfHumanHeader cargs
@@ -30,7 +30,7 @@ main = do
             then do putStrLn "No type chosen; running word-based check"
                     mapM_ putStrLn (processHumanWordData checkedwords)
                     putStrLn ""
-                    summaryData (length checkedwords) (wordlength cargs) (length dat)
+                    summaryData (length checkedwords) (matchlength cargs) (length dat)
             else 
                 if sortflag == "error" 
                 then putStrLn $ processDataError checkedwords fname
@@ -43,7 +43,7 @@ main = do
             if human cargs
             then do mapM_ putStrLn (processHumanWordData checkedwords) 
                     putStrLn ""
-                    summaryData (length checkedwords) (wordlength cargs) (length dat) 
+                    summaryData (length checkedwords) (matchlength cargs) (length dat) 
             else 
                 if sortflag == "error"
                 then putStrLn $ processDataError checkedwords fname
@@ -55,7 +55,7 @@ main = do
             if human cargs
             then do mapM_ putStrLn (processHumanLineData checkedwords)
                     putStrLn ""
-                    summaryData (length checkedwords) (wordlength cargs) (length dat)
+                    summaryData (length checkedwords) (matchlength cargs) (length dat)
             else 
                 if sortflag == "error"
                 then putStrLn $ processDataError checkedwords fname
@@ -67,7 +67,7 @@ main = do
             if human cargs
             then do mapM_ putStrLn (processHumanPercentageData checkedwords)
                     putStrLn ""
-                    summaryData (length checkedwords) (wordlength cargs) (length dat)
+                    summaryData (length checkedwords) (matchlength cargs) (length dat)
             else 
                 if sortflag == "error"
                 then putStrLn $ processDataError checkedwords fname
@@ -81,7 +81,7 @@ main = do
             then do putStrLn "No type chosen; running word-based check"
                     mapM_ putStrLn (processHumanWordData checkedwords)
                     putStrLn ""
-                    summaryData (length checkedwords) (wordlength cargs) (length dat)
+                    summaryData (length checkedwords) (matchlength cargs) (length dat)
             else 
                 if sortflag == "error" 
                 then putStrLn $ processDataError checkedwords fname

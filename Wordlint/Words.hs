@@ -150,7 +150,7 @@ zipWords s t = zipWith4 Word (words s) (wordpos s t) linepos colpos
 --
 -----------------------------------------------------------------
 
--- Check a word against the minimum word length (wordlength Arguments in WordlintArgs)
+-- Check a word against the minimum word length (matchlength Arguments in Wordlint.Args)
 isCheckWordLong :: (NumOps a) => Word a -> Int -> Bool
 isCheckWordLong (Word w _ _ _) x = length w > x
 
