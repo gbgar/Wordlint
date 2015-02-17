@@ -16,6 +16,11 @@ data Wordpair a = Wordpair
 
 type Wordpairs a = [Wordpair a]
 
+-- Wordpair equality based on coordinates so that
+-- union of multiple checks can be found regardless
+--
+instance Eq (Wordpair a) where
+         x == y = getWordpairCoords x == getWordpairCoords y
 -----------------------------------------------------------------
 --
 -- Creating and filtering Wordpairs
@@ -90,7 +95,7 @@ getWordpairLines wp = (line $ wone wp,line $ wtwo wp)
 
 
 -- return ((Line,Col)(Line,Col))
-getWordpairCoords :: (NumOps a) => Wordpair a -> ((Int,Int),(Int,Int))
+getWordpairCoords :: Wordpair a -> ((Int,Int),(Int,Int))
 getWordpairCoords wp = ((line firstword,column firstword),(line secondword,column secondword))
     where
       firstword = wone wp

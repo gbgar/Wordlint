@@ -3,7 +3,9 @@ dist/
 test/
 .gitignore
 .*.sw[a-z]
+*~
 \#*\#
+.\#*\#
 tags
 TAGS
 TAGS~

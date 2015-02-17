@@ -2,6 +2,7 @@ import Data.List
 import System.Console.CmdArgs
 import Text.PrettyPrint.Boxes 
 import Wordlint.Args
+import Wordlint.Linters
 import Wordlint.Words
 import Wordlint.Wordpairs
 
@@ -10,15 +11,18 @@ main = do
     -- Execute command line arguments, retrieve flags
     cargs <- cmdArgs cliargs
     let sortflag = sort_ cargs
-    let wordlen = matchlength cargs
-    let fname = file cargs
-    -- If human-readable flag is present, print header
     checkIfHumanHeader cargs
-    -- Acquire String data from file or stdin
-    dat <- accessInputFileData . checkFileStdin $ file cargs
-    -- blacklist data for running filter function
-    blist' <- accessBlacklistFileData . checkFileStdin $ blacklist cargs
-    let blist = setBlacklistData blist'
+    let linter = getLinter cargs
+    -- let sortflag = sort_ cargs
+    -- let wordlen = matchlength cargs
+    -- let fname = file cargs
+    -- -- If human-readable flag is present, print header
+    -- checkIfHumanHeader cargs
+    -- -- Acquire String data from file or stdin
+    -- dat <- accessInputFileData . checkFileStdin $ file cargs
+    -- -- blacklist data for running filter function
+    -- blist' <- accessBlacklistFileData . checkFileStdin $ blacklist cargs
+    -- let blist = setBlacklistData blist'
     -- 
     -- Choose checker and printer according to -t, -h flags
     -- 
@@ -91,6 +95,7 @@ main = do
 -- process*Data functions return a human-readable format. 
 -- In the future, a "machine-readable" flag will be added to the latter
 -- in order to output for use in text editor plugins.
+
 
 runWordCheck :: String -> Int -> Maybe Int -> Maybe [String] -> Arguments -> Wordpairs Int 
 runWordCheck inputdata wordlen distorall blist arg = case distorall of

@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
 module Wordlint.Args where
+import Control.Monad
 import System.Console.CmdArgs 
 import Control.Monad
 import Wordlint.Words
@@ -14,9 +15,9 @@ data Arguments  = Arguments
         ,matchlength :: Int
         -- ,type_ :: String
         -- ,distance :: String
-        ,words :: Int
-        ,lines :: Int
-        ,percent :: Float
+        ,words_ :: Int
+        ,lines_ :: Int
+        ,percent_ :: Double
         -- filters
         ,nocaps :: Bool
         ,nopunct :: Bool -- ,ignore-punctuation :: Bool goddammit
@@ -36,9 +37,9 @@ cliargs = Arguments
         -- ,type_      = "word" &= help   "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
         --                      &= typ    "word|line|percentage"
         -- ,distance   = "250"  &= help   "Maximum distance between matches. Accepts integer for word and line; float (i.e. 0.75) for percentage)"
-        ,words = 0      &= help   "Maximum distance between matches - number of words." &= typ "Int"
-        ,lines = 0      &= help   "Maximum distance between matches - number of lines" &= typ "Int"
-        ,percent = 0.0  &= help   "Maximum distance between matches - percentage of words." &= typ "Float"
+        ,words_   = 0    &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
+        ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
 
         -- filters
         ,nocaps    = False  &= help "Ignore capitalization when finding matches."
@@ -69,9 +70,9 @@ checkFileStdin s | null s = Nothing
 
 accessInputFileData :: Maybe String -> IO String
 accessInputFileData f =
-    case f of
-         Nothing -> getContents
-         Just fp -> readFile fp 
+  case f of
+   Nothing ->  getContents
+   Just fp ->  readFile fp 
 
 accessBlacklistFileData :: Maybe String -> IO String
 accessBlacklistFileData f =
@@ -82,7 +83,7 @@ accessBlacklistFileData f =
 setBlacklistData :: String -> Maybe [String]
 setBlacklistData a | null a = Nothing
                    | otherwise = Just $ lines a
-
+                                       
 
 --------------------------------------------------------------------------------
 --
@@ -114,22 +115,11 @@ runBlacklistFilter blist wordlist = case blist of
 --
 --------------------------------------------------------------------------------
 
+-- FIX: calls --distance flag
 -- Handle --all flag OR read --distance 
-checkDistanceOrAll :: (Read a, NumOps a) => Arguments -> Maybe a
-checkDistanceOrAll c | all_ c = Nothing
-                     | otherwise = Just (read $ distance c) 
-
--- Header to print if --human flag is present
-checkIfHumanHeader :: Arguments -> IO ()
-checkIfHumanHeader cargs = when (human cargs)
-                     $ putStrLn ("Running a "
-                                 ++ type_ cargs
-                                 ++ "-based check on "
-                                 ++ file cargs
-                                 ++ "\nWith a minimum distance of "
-                                 ++ show (distance cargs)
-                                 ++ " between words of length "
-                                 ++ show (matchlength cargs) ++ "\n")
+-- checkDistanceOrAll :: (Read a, NumOps a) => Arguments -> Maybe a
+-- checkDistanceOrAll c | all_ c = Nothing
+--                      | otherwise = Just (read $ distance c) 
 
 -- Handle --sort flag
 checkSortFlag :: (Num a, Ord a, NumOps a)  => String -> Wordpairs a -> Wordpairs a
@@ -139,3 +129,47 @@ checkSortFlag  x y | x == "position" = sortWordPairsByPosition y
                    | x == "error" = sortWordPairsByPosition y
                    | otherwise = y
                   
+
+-- Header to print if --human flag is present
+checkIfHumanHeader :: Arguments -> IO ()
+checkIfHumanHeader cargs = when (human cargs)
+                     $ putStrLn ("Running "
+                                 ++ getTypeOfCheck cargs
+                                 ++ " check[s] on "
+                                 ++ file cargs
+                                 ++ "\nWith minimum distance[s] of "
+                                 ++ getTypeOfCheck cargs
+                                 ++ " between words of length "
+                                 ++ show (matchlength cargs) ++ "\n")
+
+getTypeOfCheck :: Arguments -> String
+getTypeOfCheck c  = isWordsFlag c ++ " " ++ isLinesFlag c ++ " " ++ isPercentFlag c
+  
+  
+getTypeNumbers :: Arguments -> String
+getTypeNumbers c  = convertWordsFlag c ++ " " ++ convertLinesFlag c ++ " " ++ convertPercentFlag c
+
+
+isWordsFlag :: Arguments -> String
+isWordsFlag c | words_ c /= 0 = "word"
+              | otherwise = ""
+  
+isLinesFlag :: Arguments -> String
+isLinesFlag c | lines_ c /= 0 = "line"
+              | otherwise = ""
+  
+isPercentFlag :: Arguments -> String
+isPercentFlag c | percent_ c /= 0 = "percentage"
+                | otherwise = ""
+
+convertWordsFlag :: Arguments -> String
+convertWordsFlag c | words_ c /= 0 = show $ words_ c
+                   | otherwise = ""
+       
+convertLinesFlag :: Arguments -> String
+convertLinesFlag c | lines_ c /= 0 = show $ lines_ c
+                   | otherwise = ""
+       
+convertPercentFlag :: Arguments -> String
+convertPercentFlag c | percent_ c /= 0 = show $ lines_ c
+                     | otherwise = ""

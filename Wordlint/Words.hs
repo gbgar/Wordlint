@@ -20,6 +20,7 @@ import Data.List
 -- blacklist, are available to filter the list of Words prior to matching
 -- duplicates. 
 
+
 data Word a = Word 
     { lemma :: String
     ,position :: a
