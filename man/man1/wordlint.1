@@ -1,4 +1,4 @@
-.TH "WORDLINT" "1" "2014\-11\-22" "0.1.0.2
+.TH "WORDLINT" "1" "2015\-02\-20" "0.2.0.0
 .SH Name
 .PP
 wordlint \- plaintext redundancy linter
@@ -10,14 +10,15 @@ wordcheck [OPTIONS] [\-f input\-file]
 Wordlint locates matching pairs of words repeated within a user\-defined
 distance.
 Text may be linted by distance between words (that is, by word count),
-by line count, or by percentage of the total words in the file.
+by line count, and/or by percentage of the total words in the file.
+Multiple lint types may be specified at one time.
 The user may also choose a minimum word length for matches.
 .PP
 Filters are available to remove punctuation, capitalization, and/or a
 user\-defined list of words from the list of potential matches.
 .PP
-Various modes exist for data output, which is machine\-readable by
-default with column\-based formatting.
+Various modes exist for data output, which is column\-based and
+machine\-readable by default.
 Results may be sorted by alphabetically by word, by position (line
 number), or by intervening distance between matches; and may be used
 with a human\-readable mode.
@@ -37,44 +38,42 @@ If none is given, wordlint reads from stdin.
 .RE
 .SS Linting Options
 .TP
-.B \-d, \-\-distance \f[I]INT | FLOAT\f[]
-Specify maximum intervening distance between returned word\-pairs.
-\f[B]If the type of lint is either "word" or "line", an integer must be
-used\f[], while a "percentage" check will accept a float value.
-Ignored if \-a is used.
+.B \-w, \-\-words \f[I]INT\f[]
+Specify maximum intervening distance between returned word\-pairs
+measuring by word count.
+This may intersect with the \-\-lines and \-\-percent options, but is
+ignored if \-a is provided.
 Default is 250.
 .RS
 .RE
 .TP
-.B \-t, \-\-type \f[I]word|line|percentage\f[]
-Specify type of lint to perform, which affects which the calculation of
-intervening distance between word pairs.
-Options are:
+.B \-l, \-\-distance \f[I]INT\f[]
+Specify maximum intervening distance between returned word\-pairs
+measuring by line count.
+This may intersect with the \-\-words and \-\-percent options, but is
+ignored if \-a is provided.
+Default is 0 (off).
 .RS
-.IP
-.nf
-\f[C]
-\-\ word\ (default)
-\-\ line
-\-\ percentage
-\f[]
-.fi
-.PP
-A word\-type check will define a word\[aq]s "position" as it\[aq]s word
-count, while a line check uses the line number on which a word is found.
-A percentage check sets this value according to a word\[aq]s count
-divided by the total count of words in the input.
 .RE
 .TP
-.B \-w ,\-\-wordlength \f[I]NUMBER\f[]
+.B \-p, \-\-percent \f[I]DOUBLE\f[]
+Specify maximum intervening distance between returned word\-pairs
+measuring by percentage of words.
+This may intersect with the \-\-words and \-\-lines options, but is
+ignored if \-a is provided.
+Default is 0 (off).
+.RS
+.RE
+.TP
+.B \-m ,\-\-matchlength \f[I]NUMBER\f[]
 Specify minimum length of words to be matched, i.e.
-to reduce hits for "there".
+to reduce hits for "the".
 Default is 5.
 .RS
 .RE
 .SS Filters
 .TP
-.B \-b, \-\-blacklist
+.B \-b, \-\-blacklist \f[I]FILE\f[]
 Specify a file containing a newline\-separated list of words (no spaces)
 to filter from matches.
 Pairs well with \-\-nopunct, which is applied before, but activated
@@ -139,7 +138,7 @@ for easy use with \f[C]awk\f[], \f[C]sed\f[], and the like).
 .IP
 .nf
 \f[C]
-wordlint\ \-\-type\ line\ \-\-distance\ 20\ \-\-wordlength\ 7\ \-\-file\ file.txt
+wordlint\ \-\-lines\ 20\ \-\-matchlength\ 7\ \-\-file\ file.txt
 \f[]
 .fi
 .PP
@@ -149,7 +148,18 @@ Returns machine\-readable format.
 .IP
 .nf
 \f[C]
-cat\ file.txt\ |\ wordlint\ \-t\ percentage\ \-d\ 2.5\ \-a\ \-s\ word\ \-h\ 
+wordlint\ \-w\ 100\ \-l\ 20\ \-m\ 7\ \-f\ file.txt
+\f[]
+.fi
+.PP
+Finds matching strings consisting of seven characters or more and which
+fall within an intervening distance of \f[I]both\f[] 100 words
+\f[I]and\f[] twenty lines or less.
+Returns machine\-readable format.
+.IP
+.nf
+\f[C]
+cat\ file.txt\ |\ wordlint\ \-\-percent\ 2.5\ \-a\ \-s\ word\ \-h\ 
 \f[]
 .fi
 .PP

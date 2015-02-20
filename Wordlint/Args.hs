@@ -31,8 +31,8 @@ cliargs :: Arguments
 cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
-        ,matchlength = 7      &= help   "Minimum length of matched words" &= typ "Int"
-        ,words_   = 150  &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
+        ,words_   = 250  &= help   "Maximum distance between matches - number of words." &= typ "Int"
         ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
         ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
 
@@ -49,7 +49,7 @@ cliargs = Arguments
                              &= typ "word|position|distance|error"
         } 
         &= help "wordlint [OPTION]...[-f FILE]..."
-        &= summary "Wordlint v0.1.0.2 Gardner 2014 WTFPL"
+        &= summary "Wordlint v0.2.0.0 Gardner 2014 WTFPL"
         &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
                    ,"This should be useful to curb redundancy in prose."]

@@ -1,12 +1,13 @@
-wordlint 0.1.0.2: a plaintext redundancy linter written in Haskell
+wordlint 0.2.0.0: a plaintext redundancy linter written in Haskell
 
 #Description
 
 
 Wordlint locates matching pairs of words repeated within a user-defined
-distance. Text may be linted by distance between words (that is, by word
-count), by line count, or by percentage of the total words in the file.
-The user may also choose a minimum word length for matches.
+distance.  Text may be linted by distance between words (that is, by word
+count), by line count, and/or by percentage of the total words in the file.
+Multiple lint types may be specified at one time. The user may also choose
+a minimum word length for matches.
 
 Filters are available to remove punctuation, capitalization, and/or a
 user-defined list of words from the list of potential matches.
@@ -50,31 +51,24 @@ directory:
 
 ##Linting Options
 
-\-d, \-\-distance *INT | FLOAT*
+\-w, \-\-words *INT*
+    Specify maximum intervening distance between returned word-pairs
+	measuring by word count. This may intersect with the --lines and
+	--percent options, but is ignored if -a is provided. Default is 250.
 
-    Specify maximum intervening distance between returned word-pairs. **If the
-    type of lint is either "word" or "line", an integer must be used**, while a
-    "percentage" check will accept a float value. Ignored if -a is used. Default is
-    250.
+\-l, \-\-distance *INT*
+    Specify maximum intervening distance between returned word-pairs
+	measuring by line count. This may intersect with the --words and
+	--percent options, but is ignored if -a is provided. Default is 0 (off).
 
-\-t, \-\-type *word|line|percentage*
+\-p, \-\-percent *DOUBLE*
+    Specify maximum intervening distance between returned word-pairs
+	measuring by percentage of words. This may intersect with the --words and
+	--lines options, but is ignored if -a is provided. Default is 0 (off).
 
-    Specify type of lint to perform, which affects which the calculation of
-    intervening distance between word pairs. Options are:
-
-        - word (default)
-        - line
-        - percentage
-
-    A word-type check will define a word's "position" as it's word count, while a
-    line check uses the line number on which a word is found. A percentage check
-    sets this value according to a word's count divided by the total count of words
-    in the input.
-
-\-w ,\-\-wordlength *NUMBER*
-
-    Specify minimum length of words to be matched, i.e. to reduce hits for
-    "there". Default is 5.
+\-m ,\-\-matchlength *NUMBER*
+    Specify minimum length of words to be matched, i.e. to reduce hits for "the".
+	Default is 5.
 
 ##Filters
 
@@ -120,17 +114,23 @@ directory:
   `wordlint --file file.txt`
 
 Runs the default check: a word-based check on words of five or more characters.
-characters. The distance between each match is to be no more than 250
+The distance between each match is to be no more than 250
 words. The results are in a machine-readable table format (i.e. for easy
 use with `awk`, `sed`, and the like).
 
-  `wordlint --type line --distance 20 --wordlength 7 --file file.txt`
+  `wordlint --lines 20 --matchlength 7 --file file.txt`
 
 Finds matching strings consisting of seven characters or more and which
 have an intervening distance of twenty lines or less. Returns
 machine-readable format.
 
-  `cat file.txt | wordlint -t percentage -d 2.5 -a -s word -h`
+  `wordlint -w 100 -l 20 -m 7 -f file.txt`
+
+Finds matching strings consisting of seven characters or more and which fall
+within an intervening distance of *both* 100 words *and* twenty lines
+or less. Returns machine-readable format.
+
+  `cat file.txt | wordlint --percent 2.5 -a -s word -h`
 
 Finds all matching, five-characters-or-longer strings within a 2.5%
 distance of one-another within the file, and returns the output sorted

@@ -1,13 +1,45 @@
+2015-02-19 - version 0.2.0.0
+============================
+
+This version brings breaking changes if you typically
+use a non-default set of linting arguments.
+
+- Command line arguments -w/--wordlength, -d/--distance and -t/--type
+  have been removed.
+
+- The -m/--matchlength replaces -w/--wordlength
+
+- The-w/--words, -l/--lines, and -p/--percent take Int/Int/Double, respectively.
+  The parameter itself represents the type of lint you wish to perform, while the
+  argument provided by the user indicates the maximum distance between matches.
+
+- Intersecting lints have been added. The type/distance arguments provided (or not)
+  are used to create a set of lists. The intersection of these lists
+  is provided as the end result.
+
+- Some granularity in the human-readable data has been lost. Due to the addition of
+  intersecting lints, all final results are treated as Doubles, and the "intervening
+  distance" between word pairs are unlabeled. This is no issue if running one type of
+  lint, but with more, it is difficult to sort out which unit is being provided. 
+
+- Wordlint.hs has been heavily manicured.
+
+- Wordlint.Linters and the `Linter` datatype and associated functions have been
+  taken the place of the `run*Linter` family of functions in Wordlint.hs
+
+- Wordlint.Output has been added to house the Human/Machine functions from Wordlint.hs.
+  These functions have been pruned and some higher-level functions added.
+
 2014-12-01 - version 0.1.0.2
 ============================
 
-Changed "-s vim" to "-s error".
+- Changed "-s vim" to "-s error".
 
-Changed output of "-s error" to produce better, text editor-agnostic output.
+- Changed output of "-s error" to produce better, text editor-agnostic output.
 
 2014-11-25 - version 0.1.0.1 
 =============================
 
-Added labels to machine-readable output table.
+- Added labels to machine-readable output table.
 
-Minor documntation fixes
+
