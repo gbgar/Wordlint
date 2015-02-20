@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
 module Wordlint.Args where
-import Control.Monad
+
 import System.Console.CmdArgs 
 import Control.Monad
 import Wordlint.Words
@@ -13,8 +13,6 @@ data Arguments  = Arguments
         {file :: String
         -- linting options
         ,matchlength :: Int
-        -- ,type_ :: String
-        -- ,distance :: String
         ,words_ :: Int
         ,lines_ :: Int
         ,percent_ :: Double
@@ -33,11 +31,8 @@ cliargs :: Arguments
 cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
-        ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
-        -- ,type_      = "word" &= help   "Type of distance (accepts \"word\", \"line\", or \"percentage\")" 
-        --                      &= typ    "word|line|percentage"
-        -- ,distance   = "250"  &= help   "Maximum distance between matches. Accepts integer for word and line; float (i.e. 0.75) for percentage)"
-        ,words_   = 0    &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,matchlength = 7      &= help   "Minimum length of matched words" &= typ "Int"
+        ,words_   = 150  &= help   "Maximum distance between matches - number of words." &= typ "Int"
         ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
         ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
 
@@ -114,12 +109,6 @@ runBlacklistFilter blist wordlist = case blist of
 -- Output flag functions
 --
 --------------------------------------------------------------------------------
-
--- FIX: calls --distance flag
--- Handle --all flag OR read --distance 
--- checkDistanceOrAll :: (Read a, NumOps a) => Arguments -> Maybe a
--- checkDistanceOrAll c | all_ c = Nothing
---                      | otherwise = Just (read $ distance c) 
 
 -- Handle --sort flag
 checkSortFlag :: (Num a, Ord a, NumOps a)  => String -> Wordpairs a -> Wordpairs a

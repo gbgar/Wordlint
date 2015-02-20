@@ -2,6 +2,7 @@ module Wordlint.Linters where
 
 import Control.Monad
 import Data.List
+import Data.Function 
 import Wordlint.Args
 import Wordlint.Words
 import Wordlint.Wordpairs
@@ -17,11 +18,10 @@ data Linter = Linter {
   ,line'           :: Int
   ,percent'        :: Double
   ,args            :: Arguments
+  ,result          :: Wordpairs Double
 }
 
--- CommensurateWord,CommensurateWordpair data types to strip Double/Int
--- from Word/Wordpair
-
+-- Get and run linters
 getLinter :: Arguments -> IO Linter
 getLinter cargs = do
   -- get filename
@@ -32,18 +32,24 @@ getLinter cargs = do
     let w = words_ cargs
     let l = lines_ cargs
     let p = percent_ cargs
-    return $ Linter dat mlen isall blist w l p cargs
-
+    return $ Linter dat mlen isall blist w l p cargs []
 
 runAllLinters :: Linter -> Wordpairs Double
-runAllLinters l = z
-  where w = commensurateWordpairs $ getWordpairListWords l
-        l = commensurateWordpairs $ getWordpairListLines l
-        p = getWordpairListPercent l
-        r = sortBy (\x y -> compare (length x) (length y)) [w,l,p]
-        z = intersect (head r) (intersect $ tail r)
-        
-          
+runAllLinters linter = intersectWordpairs y
+  where largs  = args linter
+        words' = distorall linter (getWordpairListWords linter) (words_ largs)
+        cwords = commensurateWordpairs words'
+        lines' = distorall linter (getWordpairListLines linter) (lines_ largs)
+        clines = commensurateWordpairs lines'
+        perc   = distorall linter (getWordpairListPercent linter) (percent_ largs)
+        y      = sortBy (flip (compare `on` length)) [cwords,clines,perc]
+
+intersectWordpairs :: [Wordpairs Double] -> Wordpairs Double
+intersectWordpairs [] = []
+intersectWordpairs [a,[],[]] = a
+intersectWordpairs [a,b,[]] = a `intersect` b
+intersectWordpairs [a,b,c] = a `intersect` intersect b c
+intersectWordpairs _ = []
 
 
 getWordpairList :: (Num a, NumOps a) => Linter -> String -> Wordpairs a
@@ -57,18 +63,23 @@ getWordpairList linter type' = instring
         arg     = args linter
         blist    = maybeblacklist linter
 
+distorall :: (Eq a, Ord a, Num a, NumOps a) => Linter -> Wordpairs a -> a -> Wordpairs a
+distorall linter wordpairs num = 
+  if allornot linter
+  then wordpairs
+  else filterWordpairsByDistance wordpairs num
+
 getWordpairListWords :: Linter -> Wordpairs Int
-getWordpairListWords l = if (word' l) /= 0 then getWordpairList l "word" else []
+getWordpairListWords l = if word' l /= 0 then getWordpairList l "word" else []
 
 getWordpairListLines :: Linter -> Wordpairs Int
-getWordpairListLines l = if (line' l) /= 0 then getWordpairList l "line" else []
+getWordpairListLines l = if line' l /= 0 then getWordpairList l "line" else []
 
 getWordpairListPercent :: Linter -> Wordpairs Double
-getWordpairListPercent l = if (percent' l) /= 0 then getWordpairList l "percent" else []
+getWordpairListPercent l = if percent' l /= 0 then getWordpairList l "percent" else []
 
 commensurateWordpairs :: Wordpairs Int -> Wordpairs Double
-commensurateWordpairs [] = []
-commensurateWordpairs (x:xs) = commensurateWordpair x : commensurateWordpairs xs
+commensurateWordpairs = map commensurateWordpair
 
 commensurateWordpair :: Wordpair Int -> Wordpair Double
 commensurateWordpair x = Wordpair a b c
@@ -77,4 +88,5 @@ commensurateWordpair x = Wordpair a b c
                                c = fromIntegral $ pdiff x
 
 commensurateWords :: Word Int -> Word Double
-commensurateWords x = Word lemma x (fromIntegral . position x) line x column x
+commensurateWords x = Word (lemma x) pos (line x) (column x)
+  where pos = fromIntegral $ position x
