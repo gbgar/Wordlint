@@ -29,9 +29,12 @@ getLinter cargs = do
     blist <- liftM setBlacklistData $ accessBlacklistFileData. checkFileStdin $ blacklist cargs
     let mlen = matchlength cargs
     let isall = all_ cargs 
-    let w = words_ cargs
+    let w' = words_ cargs
     let l = lines_ cargs
     let p = percent_ cargs
+    let w = if w' == 0 && l == 0 && p == 0
+               then 250
+               else w'
     return $ Linter dat mlen isall blist w l p cargs []
 
 runAllLinters :: Linter -> Wordpairs Double

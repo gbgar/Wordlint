@@ -32,7 +32,7 @@ cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
         ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
-        ,words_   = 250  &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,words_   = 0    &= help   "Maximum distance between matches - number of words." &= typ "Int"
         ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
         ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
 
