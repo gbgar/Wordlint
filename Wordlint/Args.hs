@@ -32,7 +32,7 @@ cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
         ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
-        ,words_   = 0    &= help   "Maximum distance between matches - number of words." &= typ "Int"
+        ,words_   = 0    &= help   "Maximum distance between matches - number of words. Default 250." &= typ "Int"
         ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
         ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
 
@@ -87,7 +87,8 @@ setBlacklistData a | null a = Nothing
 --------------------------------------------------------------------------------
 
 runFilterFlags :: (NumOps a) => Words a -> Arguments -> Maybe [String] -> Words a
-runFilterFlags w arg blist = runCapsFilter arg $ runBlacklistFilter blist $ runPunctFilter arg $ runBlacklistFilter blist w
+runFilterFlags w arg blist = runCapsFilter arg $ runBlacklistFilter blist $
+                             runPunctFilter arg $ runBlacklistFilter blist w
 
 runPunctFilter :: (NumOps a) => Arguments -> Words a -> Words a
 runPunctFilter arg wordlist = if nopunct arg
@@ -136,11 +137,13 @@ getTypeOfCheck c  = isWordsFlag c ++ " " ++ isLinesFlag c ++ " " ++ isPercentFla
   
   
 getTypeNumbers :: Arguments -> String
-getTypeNumbers c  = convertWordsFlag c ++ " " ++ convertLinesFlag c ++ " " ++ convertPercentFlag c
+getTypeNumbers c  = convertWordsFlag c ++ " " ++
+                    convertLinesFlag c ++ " " ++ convertPercentFlag c
 
 
 isWordsFlag :: Arguments -> String
-isWordsFlag c | words_ c /= 0 = "word"
+isWordsFlag c | words_ c /= 0 ||
+                words_ c == 0 && lines_ c == 0 && percent_ c == 0 = "word"
               | otherwise = ""
   
 isLinesFlag :: Arguments -> String
@@ -160,5 +163,5 @@ convertLinesFlag c | lines_ c /= 0 = show $ lines_ c
                    | otherwise = ""
        
 convertPercentFlag :: Arguments -> String
-convertPercentFlag c | percent_ c /= 0 = show $ lines_ c
+convertPercentFlag c | percent_ c /= 0 = show $ percent_ c
                      | otherwise = ""

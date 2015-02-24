@@ -32,20 +32,19 @@ getLinter cargs = do
     let w' = words_ cargs
     let l = lines_ cargs
     let p = percent_ cargs
-    let w = if w' == 0 && l == 0 && p == 0
+    let w = if l == 0 && p == 0.0 &&  w' == 0
                then 250
-               else w'
+               else w' 
     return $ Linter dat mlen isall blist w l p cargs []
 
 runAllLinters :: Linter -> Wordpairs Double
 runAllLinters linter = intersectWordpairs y
-  where largs  = args linter
-        words' = distorall linter (getWordpairListWords linter) (words_ largs)
-        cwords = commensurateWordpairs words'
-        lines' = distorall linter (getWordpairListLines linter) (lines_ largs)
-        clines = commensurateWordpairs lines'
-        perc   = distorall linter (getWordpairListPercent linter) (percent_ largs)
-        y      = sortBy (flip (compare `on` length)) [cwords,clines,perc]
+  where words'' = distorall linter (getWordpairListWords linter) (word' linter)
+        cwords = commensurateWordpairs words''
+        lines'' = distorall linter (getWordpairListLines linter) (line' linter)
+        clines = commensurateWordpairs lines''
+        perc   = distorall linter (getWordpairListPercent linter) (percent' linter)
+        y      = sortBy (flip compare `on` length) [cwords,clines,perc]
 
 intersectWordpairs :: [Wordpairs Double] -> Wordpairs Double
 intersectWordpairs [] = []
