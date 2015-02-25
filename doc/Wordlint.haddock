@@ -128,4 +128,8 @@ editors (i.e. Vim\'s \'erororformat\' option).
 #see-also#
 
 A Vim front-end to Wordlint, creatively named Wordlint.vim, is available
-at https:\/\/github.com\/gbgar\/Wordlint.vim
+at <https://github.com/gbgar/Wordlint.vim>
+
+A compiler and a flycheck interface are available for Emacs:
+<https://github.com/gbgar/wordlint.el> and
+<https://github.com/gbgar/flycheck-wordlint.el>.

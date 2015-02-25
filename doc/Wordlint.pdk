@@ -1,7 +1,7 @@
 ---
 title: 'WORDLINT'
 section: '1'
-date: 2015-02-20
+date: 2015-02-24
 author: 'GB Gardner'
 version: 0.2.0.0
 ...
@@ -139,4 +139,10 @@ matches. Returns output designed for use in text editors (i.e. Vim's
 #See Also
 
 A Vim front-end to Wordlint, creatively named Wordlint.vim, is available
-at https:\/\/github.com\/gbgar/Wordlint.vim
+at [https://github.com/gbgar/Wordlint.vim](https://github.com/gbgar/Wordlint.vim)
+
+A compiler and a flycheck interface are available for Emacs:
+[https://github.com/gbgar/wordlint.el](https://github.com/gbgar/wordlint.el)
+and
+[https://github.com/gbgar/flycheck-wordlint.el](https://github.com/gbgar/flycheck-wordlint.el).
+
