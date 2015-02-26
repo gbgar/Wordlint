@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                Wordlint
-version:             0.2.0.2
+version:             0.2.0.3
 synopsis:            Plaintext prose redundancy linter.
 
 description:         Wordlint locates matching pairs of words repeated within a user-defined
@@ -43,7 +43,7 @@ extra-doc-files:    doc/Wordlint.haddock
                     man/man1/wordlint.1
 
 executable wordlint
-  hs-source-dirs:      src
+  hs-source-dirs:      src, src/Wordlint
   main-is:             Wordlint.hs
   other-extensions:    DeriveDataTypeable
   build-depends:       base >=4.7 && <4.8, cmdargs >=0.10.0 && <0.11.0, boxes >=0.1 && <0.2
