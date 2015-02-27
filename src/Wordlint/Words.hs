@@ -199,3 +199,7 @@ filterWordCapitalization xs = [Word [toLower a | a <- lemma x]
 --Filter blacklist given in file denoted by -b flag
 filterWordBlacklist :: (NumOps a) => Words a -> [String] -> Words a
 filterWordBlacklist xs blacklist = [x | x <- xs, let w = lemma x, w `notElem` blacklist] 
+
+--Filter whitelist given in file denoted by --whitelist flag
+filterWordWhitelist :: (NumOps a) => Words a -> [String] -> Words a
+filterWordWhitelist xs blacklist = [x | x <- xs, let w = lemma x, w `elem` blacklist] 

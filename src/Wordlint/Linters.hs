@@ -14,6 +14,7 @@ data Linter = Linter {
   ,wordlength      :: Int
   ,allornot        :: Bool
   ,maybeblacklist  :: Maybe [String]
+  ,maybewhitelist  :: Maybe [String]
   ,word'           :: Int
   ,line'           :: Int
   ,percent'        :: Double
@@ -26,7 +27,8 @@ getLinter :: Arguments -> IO Linter
 getLinter cargs = do
   -- get filename
     dat <- accessInputFileData . checkFileStdin $ file cargs
-    blist <- liftM setBlacklistData $ accessBlacklistFileData. checkFileStdin $ blacklist cargs
+    blist <- liftM setListData $ accessListFileData. checkFileStdin $ blacklist cargs
+    wlist <- liftM setListData $ accessListFileData. checkFileStdin $ whitelist cargs
     let mlen = matchlength cargs
     let isall = all_ cargs 
     let w' = words_ cargs
@@ -35,7 +37,7 @@ getLinter cargs = do
     let w = if l == 0 && p == 0.0 &&  w' == 0
                then 250
                else w' 
-    return $ Linter dat mlen isall blist w l p cargs []
+    return $ Linter dat mlen isall blist wlist w l p cargs []
 
 runAllLinters :: Linter -> Wordpairs Double
 runAllLinters linter = intersectWordpairs y
@@ -58,12 +60,13 @@ getWordpairList :: (Num a, NumOps a) => Linter -> String -> Wordpairs a
 getWordpairList linter type' = instring
   where instring = sortWordsByString . filterMatchingWords $ dwords
         dwords   = checkWordList fwords wordlen
-        fwords   = runFilterFlags cwords arg blist
+        fwords   = runFilterFlags cwords arg blist wlist
         cwords   = zipWords in' type'
         wordlen  = wordlength linter
         in' = inputdata linter
         arg     = args linter
         blist    = maybeblacklist linter
+        wlist    = maybewhitelist linter
 
 distorall :: (Eq a, Ord a, Num a, NumOps a) => Linter -> Wordpairs a -> a -> Wordpairs a
 distorall linter wordpairs num = 

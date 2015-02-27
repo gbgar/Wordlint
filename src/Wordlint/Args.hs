@@ -20,6 +20,7 @@ data Arguments  = Arguments
         ,nocaps :: Bool
         ,nopunct :: Bool -- ,ignore-punctuation :: Bool goddammit
         ,blacklist :: String
+        ,whitelist :: String
         -- output options
         ,all_ :: Bool
         ,human :: Bool
@@ -40,6 +41,8 @@ cliargs = Arguments
         ,nocaps    = False  &= help "Ignore capitalization when finding matches."
         ,nopunct   = False  &=  help "Ignore punctuation when finding matches."
         ,blacklist = ""     &=  help "File with newline-separated list of words to filter from output." 
+                            &= typFile
+        ,whitelist = ""     &=  help "File with newline-separated list of words to allow in output." 
                             &= typFile
 
         -- output options
@@ -69,14 +72,14 @@ accessInputFileData f =
    Nothing ->  getContents
    Just fp ->  readFile fp 
 
-accessBlacklistFileData :: Maybe String -> IO String
-accessBlacklistFileData f =
+accessListFileData :: Maybe String -> IO String
+accessListFileData f =
     case f of
         Nothing -> return ""
         Just fp -> readFile fp 
 
-setBlacklistData :: String -> Maybe [String]
-setBlacklistData a | null a = Nothing
+setListData :: String -> Maybe [String]
+setListData a | null a = Nothing
                    | otherwise = Just $ lines a
                                        
 
@@ -86,8 +89,8 @@ setBlacklistData a | null a = Nothing
 --
 --------------------------------------------------------------------------------
 
-runFilterFlags :: (NumOps a) => Words a -> Arguments -> Maybe [String] -> Words a
-runFilterFlags w arg blist = runCapsFilter arg $ runBlacklistFilter blist $
+runFilterFlags :: (NumOps a) => Words a -> Arguments -> Maybe [String] -> Maybe [String] -> Words a
+runFilterFlags w arg blist wlist = runWhitelistFilter wlist $runCapsFilter arg $ runBlacklistFilter blist $
                              runPunctFilter arg $ runBlacklistFilter blist w
 
 runPunctFilter :: (NumOps a) => Arguments -> Words a -> Words a
@@ -105,6 +108,10 @@ runBlacklistFilter blist wordlist = case blist of
                                         Nothing -> wordlist
                                         Just x -> filterWordBlacklist wordlist x
 
+runWhitelistFilter :: (NumOps a) => Maybe [String] -> Words a -> Words a
+runWhitelistFilter wlist wordlist = case wlist of
+                                        Nothing -> wordlist
+                                        Just x -> filterWordWhitelist wordlist x
 --------------------------------------------------------------------------------
 --
 -- Output flag functions
