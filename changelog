@@ -1,3 +1,11 @@
+2015-02-27 - version 0.2.1.0
+============================
+
+- --whitelist [FILE] option and filter has been added.
+	This is the final filter run against the word lists. The whitelist
+	file should follow the same format as the blacklist. Only words
+	that match entries in the whitelist will be output.
+
 2015-02-19 - version 0.2.0.0
 ============================
 

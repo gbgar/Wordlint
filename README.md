@@ -76,12 +76,19 @@ directory:
 
 ##Filters
 
-\-b, \-\-blacklist
+\-b, \-\-blacklist *FILE*
 
-    Specify a file containing a newline-separated list of words (no spaces) to
-    filter from matches. Pairs well with --nopunct, which is applied before, but 
-    activated prior to application of --nocaps filter. Thus, --nocaps will not
-    interfere, for example, with proper names given in the blacklist.
+	Specify a file containing a newline-separated list of words (no
+    spaces) to filter against matches. Pairs well with --nopunct, which is
+    activated prior to application of --nocaps filter. The blacklist is
+	applied again after the --nocaps filter, thus, --nocaps
+    will not interfere, for example, with proper names given in the
+    blacklist.
+
+\-\-whitelist *FILE*
+
+	Specify a file containing a newline-separated list of words (no spaces) to
+    only allow specific matches to be output.
 
 \-\-nocaps
 
