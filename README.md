@@ -52,21 +52,25 @@ directory:
 ##Linting Options
 
 \-w, \-\-words *INT*
+
     Specify maximum intervening distance between returned word-pairs
 	measuring by word count. This may intersect with the --lines and
 	--percent options, but is ignored if -a is provided. Default is 250.
 
 \-l, \-\-distance *INT*
+
     Specify maximum intervening distance between returned word-pairs
 	measuring by line count. This may intersect with the --words and
 	--percent options, but is ignored if -a is provided. Default is 0 (off).
 
 \-p, \-\-percent *DOUBLE*
+
     Specify maximum intervening distance between returned word-pairs
 	measuring by percentage of words. This may intersect with the --words and
 	--lines options, but is ignored if -a is provided. Default is 0 (off).
 
 \-m ,\-\-matchlength *NUMBER*
+
     Specify minimum length of words to be matched, i.e. to reduce hits for "the".
 	Default is 5.
 
