@@ -49,7 +49,7 @@ cliargs = Arguments
                              &= typ "word|position|distance|error"
         } 
         &= help "wordlint [OPTION]...[-f FILE]..."
-        &= summary "Wordlint v0.2.0.3 Gardner 2014 WTFPL"
+        &= summary "Wordlint v0.2.0.4 Gardner 2014 WTFPL"
         &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
                    ,"This should be useful to curb redundancy in prose."]

@@ -1,4 +1,4 @@
-wordlint 0.2.0.3: a plaintext redundancy linter written in Haskell
+wordlint 0.2.0.4: a plaintext redundancy linter written in Haskell
 
 #Description
 
