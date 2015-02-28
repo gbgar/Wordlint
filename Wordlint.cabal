@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                Wordlint
-version:             0.2.0.4
+version:             0.2.1.0
 synopsis:            Plaintext prose redundancy linter.
 
 description:         Wordlint locates matching pairs of words repeated within a user-defined
