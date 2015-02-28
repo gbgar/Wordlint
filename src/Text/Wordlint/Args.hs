@@ -32,24 +32,24 @@ cliargs :: Arguments
 cliargs = Arguments
         {file = ""          &= help "If not present, read from stdin" &= typFile
         -- linting options
-        ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int"
-        ,words_   = 0    &= help   "Maximum distance between matches - number of words. Default 250." &= typ "Int"
-        ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int"
-        ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double"
+        ,matchlength = 5      &= help   "Minimum length of matched words" &= typ "Int" &= groupname "Linting Options"
+        ,words_   = 0    &= help   "Maximum distance between matches - number of words. Default 250." &= typ "Int" &= name "w" &= groupname "Linting Options"
+        ,lines_   = 0    &= help   "Maximum distance between matches - number of lines" &= typ "Int" &= groupname "Linting Options"
+        ,percent_ = 0    &= help   "Maximum distance between matches - percentage of words." &= typ "Double" &= groupname "Linting Options"
 
         -- filters
-        ,nocaps    = False  &= help "Ignore capitalization when finding matches."
-        ,nopunct   = False  &=  help "Ignore punctuation when finding matches."
+        ,nocaps    = False  &= help "Ignore capitalization when finding matches." &= groupname "Filter Options"
+        ,nopunct   = False  &=  help "Ignore punctuation when finding matches." &= groupname "Filter Options"
         ,blacklist = ""     &=  help "File with newline-separated list of words to filter from output." 
-                            &= typFile
+                            &= typFile &= groupname "Filter Options"
         ,whitelist = ""     &=  help "File with newline-separated list of words to allow in output." 
-                            &= typFile
+                            &= typFile &= groupname "Filter Options"
 
         -- output options
-        ,all_   = False      &= help "Show all matched results regardless of intervening distance"
-        ,human  = False      &= help "Print resutlts in human-readable form."
-        ,sort_  = "position" &= help "Sort alphabetically, by position, or by intervening distance"
-                             &= typ "word|position|distance|error"
+        ,all_   = False      &= help "Show all matched results regardless of intervening distance" &= groupname "Output Options"
+        ,human  = False      &= help "Print resutlts in human-readable form." &= groupname "Output Options"
+        ,sort_  = "position" &= help "Sort alphabetically, by position, or by intervening distance" 
+                             &= typ "word|position|distance|error" &= groupname "Output Options"
         } 
         &= help "wordlint [OPTION]...[-f FILE]..."
         &= summary "Wordlint v0.2.1.0 Gardner 2014 WTFPL"
