@@ -1,7 +1,7 @@
 import System.Console.CmdArgs
-import Wordlint.Args
-import Wordlint.Linters
-import Wordlint.Output
+import Text.Wordlint.Args
+import Text.Wordlint.Linters
+import Text.Wordlint.Output
 
 main :: IO ()
 main = do

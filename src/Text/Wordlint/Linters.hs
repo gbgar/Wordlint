@@ -1,11 +1,11 @@
-module Wordlint.Linters where
+module Text.Wordlint.Linters where
 
 import Control.Monad
 import Data.List
 import Data.Function 
-import Wordlint.Args
-import Wordlint.Words
-import Wordlint.Wordpairs
+import Text.Wordlint.Args
+import Text.Wordlint.Words
+import Text.Wordlint.Wordpairs
 
 -- Linter data type which holds external input and parameters
 -- necessary to easily 

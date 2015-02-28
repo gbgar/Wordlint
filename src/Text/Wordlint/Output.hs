@@ -1,11 +1,11 @@
-module Wordlint.Output where
+module Text.Wordlint.Output where
 
 import Data.List
 import Text.PrettyPrint.Boxes 
-import Wordlint.Args
-import Wordlint.Linters
-import Wordlint.Words
-import Wordlint.Wordpairs
+import Text.Wordlint.Args
+import Text.Wordlint.Linters
+import Text.Wordlint.Words
+import Text.Wordlint.Wordpairs
 
 produceOutput :: (Show a, Eq a, Ord a, Num a, NumOps a) => Linter -> Wordpairs a -> IO ()
 produceOutput linter wordpairs

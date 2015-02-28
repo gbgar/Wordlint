@@ -1,11 +1,11 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module Wordlint.Args where
+module Text.Wordlint.Args where
 
 import System.Console.CmdArgs 
 import Control.Monad
-import Wordlint.Words
-import Wordlint.Wordpairs
+import Text.Wordlint.Words
+import Text.Wordlint.Wordpairs
 
 -- CLI Arguments
 -- Data structure and init function for CmdArgs

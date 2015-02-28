@@ -1,4 +1,4 @@
-module Wordlint.Words where
+module Text.Wordlint.Words where
 import Data.Char (isPunctuation, toLower)
 import Data.List 
  
