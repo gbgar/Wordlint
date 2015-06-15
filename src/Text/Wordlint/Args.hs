@@ -2,6 +2,7 @@
 
 module Text.Wordlint.Args where
 
+import Prelude hiding (Word)
 import System.Console.CmdArgs 
 import Control.Monad
 import Text.Wordlint.Words
@@ -80,7 +81,7 @@ accessListFileData f =
 
 setListData :: String -> Maybe [String]
 setListData a | null a = Nothing
-                   | otherwise = Just $ lines a
+              | otherwise = Just $ lines a
                                        
 
 --------------------------------------------------------------------------------
@@ -90,8 +91,7 @@ setListData a | null a = Nothing
 --------------------------------------------------------------------------------
 
 runFilterFlags :: (NumOps a) => Words a -> Arguments -> Maybe [String] -> Maybe [String] -> Words a
-runFilterFlags w arg blist wlist = runWhitelistFilter wlist $runCapsFilter arg $ runBlacklistFilter blist $
-                             runPunctFilter arg $ runBlacklistFilter blist w
+runFilterFlags w arg blist wlist = runWhitelistFilter wlist $ runCapsFilter arg $ runBlacklistFilter blist $ runPunctFilter arg $ runBlacklistFilter blist w
 
 runPunctFilter :: (NumOps a) => Arguments -> Words a -> Words a
 runPunctFilter arg wordlist = if nopunct arg

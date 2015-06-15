@@ -1,4 +1,6 @@
 module Text.Wordlint.Words where
+
+import Prelude hiding (Word)
 import Data.Char (isPunctuation, toLower)
 import Data.List 
  
@@ -202,4 +204,4 @@ filterWordBlacklist xs blacklist = [x | x <- xs, let w = lemma x, w `notElem` bl
 
 --Filter whitelist given in file denoted by --whitelist flag
 filterWordWhitelist :: (NumOps a) => Words a -> [String] -> Words a
-filterWordWhitelist xs blacklist = [x | x <- xs, let w = lemma x, w `elem` blacklist] 
+filterWordWhitelist xs whitelist = [x | x <- xs, let w = lemma x, w `elem` whitelist] 

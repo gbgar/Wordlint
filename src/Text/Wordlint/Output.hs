@@ -1,5 +1,6 @@
 module Text.Wordlint.Output where
 
+import Prelude hiding (Word)
 import Data.List
 import Text.PrettyPrint.Boxes 
 import Text.Wordlint.Args

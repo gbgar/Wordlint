@@ -1,5 +1,6 @@
 module Text.Wordlint.Linters where
 
+import Prelude hiding (Word)
 import Control.Monad
 import Data.List
 import Data.Function 

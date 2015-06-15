@@ -1,6 +1,7 @@
 module Text.Wordlint.Wordpairs where
 
-import  Data.List 
+import Prelude hiding (Word)
+import Data.List 
 import Text.Wordlint.Words
 
 --

@@ -1,3 +1,4 @@
+import Prelude hiding (Word)
 import System.Console.CmdArgs
 import Text.Wordlint.Args
 import Text.Wordlint.Linters
