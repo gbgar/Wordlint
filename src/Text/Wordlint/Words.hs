@@ -1,3 +1,19 @@
+-- Copyright © 2014-2016 Blake Gardner github.com/gbgar
+-- This file is part of Wordlint.
+
+-- Wordlint is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+
+-- Wordlint is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+
+-- You should have received a copy of the GNU General Public License
+-- along with Wordlint.  If not, see <http://www.gnu.org/licenses/>.
+
 module Text.Wordlint.Words where
 
 import Prelude hiding (Word)
@@ -6,7 +22,7 @@ import Data.List
  
 --
 -- This module contains types and functions for working with words and their
--- positions used in processing of file. A "Word" is a data structure
+-- positions used in processing the file. A "Word" is a data structure
 -- containing a word string; its position by word count, line, or percentage of
 -- file used to calculate intervening distances; and its line and and column
 -- positions used when returning data.

@@ -1,3 +1,19 @@
+-- Copyright © 2014-2016 Blake Gardner github.com/gbgar
+-- This file is part of Wordlint.
+
+-- Wordlint is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+
+-- Wordlint is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+
+-- You should have received a copy of the GNU General Public License
+-- along with Wordlint.  If not, see <http://www.gnu.org/licenses/>.
+
 {-# LANGUAGE DeriveDataTypeable #-}
 
 module Text.Wordlint.Args where
@@ -53,7 +69,7 @@ cliargs = Arguments
                              &= typ "word|position|distance|error" &= groupname "Output Options"
         } 
         &= help "wordlint [OPTION]...[-f FILE]..."
-        &= summary "Wordlint v0.2.1.0 Gardner 2014 WTFPL"
+        &= summary "Wordlint v0.2.1.0 Gardner 2014-2016 WTFPL"
         &= details ["Wordlint finds pairs of repeated words within a given"
                    ,"numerical range of words, lines or percentage of the input."
                    ,"This should be useful to curb redundancy in prose."]

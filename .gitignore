@@ -11,3 +11,5 @@ TAGS
 TAGS~
 Wordcheck
 /Wordlint/Output.hs
+/.cabal-sandbox/add-source-timestamps
+/doc/.Wordlint.pdk.man.pandoc
