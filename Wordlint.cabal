@@ -30,7 +30,7 @@ description:         Wordlint locates matching pairs of words repeated within a 
                      (https:\/\/github.com\/gbgar\/wordlint.el).
 
 homepage:            https://github.com/gbgar/Wordlint
-license:             OtherLicense
+license:             GPL
 license-file:        LICENSE
 author:              GB Gardner
 maintainer:          gbgar@users.noreply.github.com
